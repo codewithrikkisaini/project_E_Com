@@ -41,18 +41,32 @@ class Form extends Component
         $this->product = $product?->exists ? $product : null;
 
         if ($this->product) {
-            $this->name = $this->product->name;
-            $this->slug = $this->product->slug;
-            $this->stock = (int) $this->product->stock;
-            $this->price = (string) $this->product->price;
-            $this->description = (string) $this->product->description;
-            $this->content = (string) $this->product->content;
-            $this->existingImage = $this->product->image;
-            $this->meta_title = (string) $this->product->meta_title;
-            $this->meta_description = (string) $this->product->meta_description;
-            $this->meta_keywords = (string) $this->product->meta_keywords;
-            $this->autoSlug = false;
+            $this->fillFromProduct($this->product);
         }
+    }
+
+    public function edit(int $id): void
+    {
+        $product = Product::findOrFail($id);
+        $this->fillFromProduct($product);
+    }
+
+    public function createNew(): void
+    {
+        $this->product = null;
+        $this->name = '';
+        $this->slug = '';
+        $this->stock = 0;
+        $this->price = '0';
+        $this->description = '';
+        $this->content = '';
+        $this->image = null;
+        $this->existingImage = null;
+        $this->meta_title = '';
+        $this->meta_description = '';
+        $this->meta_keywords = '';
+        $this->autoSlug = true;
+        $this->resetValidation();
     }
 
     public function updatedName(string $value): void
@@ -149,5 +163,23 @@ class Form extends Component
             'products' => $products,
         ])
             ->layout('layouts.app');
+    }
+
+    private function fillFromProduct(Product $product): void
+    {
+        $this->product = $product;
+        $this->name = $product->name;
+        $this->slug = $product->slug;
+        $this->stock = (int) $product->stock;
+        $this->price = (string) $product->price;
+        $this->description = (string) $product->description;
+        $this->content = (string) $product->content;
+        $this->image = null;
+        $this->existingImage = $product->image;
+        $this->meta_title = (string) $product->meta_title;
+        $this->meta_description = (string) $product->meta_description;
+        $this->meta_keywords = (string) $product->meta_keywords;
+        $this->autoSlug = false;
+        $this->resetValidation();
     }
 }

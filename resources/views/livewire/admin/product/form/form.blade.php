@@ -8,10 +8,12 @@
                 <p class="text-sm text-slate-500">Add product details, image, and SEO information.</p>
             </div>
 
-            <a href="{{ route('admin.products') }}"
-                class="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">
-                Product Home
-            </a>
+            @if ($product)
+                <button type="button" wire:click="createNew"
+                    class="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">
+                    New Product
+                </button>
+            @endif
         </div>
 
         @if (session('success'))
@@ -180,10 +182,10 @@
                                 <td class="px-4 py-3 text-slate-600">{{ $item->created_at?->format('d M Y') }}</td>
                                 <td class="px-4 py-3 text-right">
                                     <div class="flex items-center justify-end gap-2">
-                                        <a href="{{ route('admin.product.edit', $item) }}"
+                                        <button type="button" wire:click="edit({{ $item->id }})"
                                             class="rounded-lg border border-blue-200 px-3 py-1.5 text-xs font-semibold text-blue-700 hover:bg-blue-50">
                                             Edit
-                                        </a>
+                                        </button>
                                         <button type="button" wire:click="delete({{ $item->id }})"
                                             wire:confirm="Are you sure you want to delete this product?"
                                             class="rounded-lg border border-rose-200 px-3 py-1.5 text-xs font-semibold text-rose-700 hover:bg-rose-50">

@@ -9,7 +9,7 @@
 
         @php
             $active = fn($path) => request()->is($path)
-                ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-md'
+                ? 'bg-gray-100 text-gray-900'
                 : 'text-gray-700 hover:bg-gray-100';
         @endphp
 
@@ -17,70 +17,74 @@
 
             {{-- Dashboard --}}
             <a href="{{ url('/admin/dashboard') }}"
-                class="flex items-center gap-3 rounded-lg px-4 py-3 transition {{ $active('admin/dashboard*') }}">
+                class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/dashboard*') }}">
                 <span>🏠</span>
                 <span class="font-semibold">Dashboard</span>
             </a>
 
             {{-- Products --}}
             <a href="{{ url('/admin/products') }}"
-                class="flex items-center gap-3 rounded-lg px-4 py-3 transition {{ $active('admin/products*') }}">
-                <span>📦</span>
+                class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/products*') }}">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 6a2 2 0 012-2h12a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V6z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5v4M15 5v4" />
+                </svg>
                 <span>Products</span>
             </a>
 
             {{-- Banner --}}
             <a href="{{ url('/admin/banner') }}"
-                class="flex items-center gap-3 rounded-lg px-4 py-3 transition {{ $active('admin/banner*') }}">
+                class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/banner*') }}">
                 <span>🖼</span>
                 <span>Banner</span>
             </a>
 
             {{-- Services --}}
             <a href="{{ url('/admin/services') }}"
-                class="flex items-center gap-3 rounded-lg px-4 py-3 transition {{ $active('admin/service*') }}">
+                class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/service*') }}">
                 <span>🧰</span>
                 <span>Services</span>
             </a>
 
             {{-- About --}}
             <a href="{{ url('/admin/about') }}"
-                class="flex items-center gap-3 rounded-lg px-4 py-3 transition {{ $active('admin/about*') }}">
+                class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/about*') }}">
                 <span>ℹ</span>
                 <span>About</span>
             </a>
 
             {{-- Testimonials --}}
             <a href="{{ url('/admin/testimonials') }}"
-                class="flex items-center gap-3 rounded-lg px-4 py-3 transition {{ $active('admin/testimonials*') }}">
+                class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/testimonials*') }}">
                 <span>💬</span>
                 <span>Testimonials</span>
             </a>
 
             {{-- Orders --}}
             <a href="{{ url('/admin/orders') }}"
-                class="flex items-center gap-3 rounded-lg px-4 py-3 transition {{ $active('admin/orders*') }}">
+                class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/orders*') }}">
                 <span>📑</span>
                 <span>Orders</span>
             </a>
 
             {{-- Users --}}
             <a href="{{ url('/admin/users') }}"
-                class="flex items-center gap-3 rounded-lg px-4 py-3 transition {{ $active('admin/users*') }}">
+                class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/users*') }}">
                 <span>👤</span>
                 <span>Users</span>
             </a>
 
             {{-- QR Payment --}}
             <a href="{{ url('/admin/payment-settings') }}"
-                class="flex items-center gap-3 rounded-lg px-4 py-3 transition {{ $active('admin/payment-settings*') }}">
+                class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/payment-settings*') }}">
                 <span>💳</span>
                 <span>QR Payment</span>
             </a>
 
             {{-- Settings --}}
             <a href="{{ url('/admin/settings') }}"
-                class="flex items-center gap-3 rounded-lg px-4 py-3 transition {{ $active('admin/settings*') }}">
+                class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/settings*') }}">
                 <span>⚙</span>
                 <span>Settings</span>
             </a>
@@ -89,7 +93,7 @@
             <div x-data="{ open: {{ request()->is('admin/blog*') ? 'true' : 'false' }} }">
 
                 <button @click="open = !open"
-                    class="flex items-center justify-between w-full px-4 py-3 rounded-lg transition text-gray-700 hover:bg-gray-100">
+                    class="flex items-center justify-between w-full px-4 py-3 transition text-gray-700 hover:bg-gray-100">
 
                     <div class="flex items-center gap-3">
                         <span>📝</span>
@@ -120,13 +124,13 @@
             </div>
 
             <a href="{{ url('/admin/enquiries?type=general') }}"
-                class="flex items-center gap-3 px-4 py-3 rounded-lg transition {{ request()->fullUrlIs('*type=general*') ? 'bg-blue-100 text-blue-700' : 'text-gray-700 hover:bg-gray-100' }}">
+                class="flex items-center gap-3 px-4 py-3 transition {{ request()->fullUrlIs('*type=general*') ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-100' }}">
                 <span>📩</span>
                 <span>General Enquiry</span>
             </a>
 
             <a href="{{ url('/admin/enquiries?type=product') }}"
-                class="flex items-center gap-3 px-4 py-3 rounded-lg transition {{ request()->fullUrlIs('*type=product*') ? 'bg-blue-100 text-blue-700' : 'text-gray-700 hover:bg-gray-100' }}">
+                class="flex items-center gap-3 px-4 py-3 transition {{ request()->fullUrlIs('*type=product*') ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-100' }}">
                 <span>📦</span>
                 <span>Product Enquiry</span>
             </a>
@@ -134,7 +138,7 @@
             {{-- LOGOUT --}}
             <div class="pt-4 border-t">
                 <a href="#"
-                    class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:text-red-600 hover:bg-red-50 rounded-lg transition">
+                    class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:text-red-600 hover:bg-red-50 transition">
                     <span>🚪</span>
                     <span>Logout</span>
                 </a>
