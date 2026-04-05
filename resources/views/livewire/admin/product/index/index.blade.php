@@ -24,6 +24,12 @@
             </div>
         @endif
 
+        @if (session('error'))
+            <div class="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm lg:p-6">
             <div class="mb-4 max-w-md">
                 <input type="text" wire:model.live.debounce.300ms="search" placeholder="Search by name or slug..."

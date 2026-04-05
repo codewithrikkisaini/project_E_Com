@@ -88,6 +88,12 @@
                     </div>
                 @endif
 
+                @if (session('error'))
+                    <div class="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
                 <form wire:submit="save" class="space-y-6">
                     <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm lg:p-7">
                         <h2 class="text-lg font-semibold text-slate-800">Product Details</h2>

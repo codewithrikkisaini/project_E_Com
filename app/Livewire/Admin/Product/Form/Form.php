@@ -3,6 +3,8 @@
 namespace App\Livewire\Admin\Product\Form;
 
 use App\Models\Product;
+use Illuminate\Database\QueryException;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Url;
 use Livewire\Component;
@@ -151,18 +153,38 @@ class Form extends Component
 
     public function render()
     {
-        $products = Product::query()
-            ->when($this->search !== '', function ($query) {
-                $query->where('name', 'like', "%{$this->search}%")
-                    ->orWhere('slug', 'like', "%{$this->search}%");
-            })
-            ->latest()
-            ->paginate(10);
+        try {
+            $products = Product::query()
+                ->when($this->search !== '', function ($query) {
+                    $query->where('name', 'like', "%{$this->search}%")
+                        ->orWhere('slug', 'like', "%{$this->search}%");
+                })
+                ->latest()
+                ->paginate(10);
+        } catch (QueryException $exception) {
+            report($exception);
+            session()->now('error', 'Database connection failed. Please start MySQL and refresh this page.');
+            $products = $this->emptyProductsPaginator();
+        }
 
         return view('livewire.admin.product.form.form', [
             'products' => $products,
         ])
             ->layout('layouts.app');
+    }
+
+    private function emptyProductsPaginator(): LengthAwarePaginator
+    {
+        return new LengthAwarePaginator(
+            collect(),
+            0,
+            10,
+            LengthAwarePaginator::resolveCurrentPage(),
+            [
+                'path' => request()->url(),
+                'query' => request()->query(),
+            ]
+        );
     }
 
     private function fillFromProduct(Product $product): void
