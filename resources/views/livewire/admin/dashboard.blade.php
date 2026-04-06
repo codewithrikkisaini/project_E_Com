@@ -40,12 +40,6 @@
                 <span>Banner</span>
             </a>
 
-            {{-- Services --}}
-            <a href="{{ url('/admin/services') }}"
-                class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/service*') }}">
-                <span>🧰</span>
-                <span>Services</span>
-            </a>
 
             {{-- About --}}
             <a href="{{ url('/admin/about') }}"
@@ -150,7 +144,7 @@
     <main class="flex-1">
         <header class="border-b border-slate-200 bg-white px-4 py-3 lg:px-8">
             <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                <h1 class="text-3xl font-semibold text-slate-900 lg:text-[42px] lg:leading-none">Dashboard</h1>
+                <h1 class="text-3xl font-semibold text-slate-900 lg:text-[42px] lg:leading-none">{{ $pageTitle }}</h1>
 
                 <div class="flex items-center gap-3">
                     <div class="relative">
@@ -171,10 +165,134 @@
         </header>
 
         <section class="p-4 lg:p-8">
-            <div class="admin-card p-6 text-slate-600">
-                Header screenshot ke hisaab se set ho gaya. Ab next bol do: cards/table bhi same style me bana deta
-                hoon.
-            </div>
+            @if ($isAboutPage)
+                <div class="admin-card space-y-5 p-6">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900">About Page</h2>
+                        <p class="mt-1 text-sm text-slate-600">Manage the About page content shown on the website.</p>
+                    </div>
+
+                    @if ($statusMessage || session('status'))
+                        <div class="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm text-emerald-700">
+                            {{ $statusMessage ?? session('status') }}
+                        </div>
+                    @endif
+
+                    <div class="space-y-3">
+                        <label class="text-sm font-semibold text-slate-700">About Content</label>
+
+                        <div class="rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
+                            <div class="mb-3 flex flex-wrap items-center gap-2 border-b border-slate-100 pb-3">
+                                <button type="button"
+                                    class="about-tool rounded-md border border-slate-200 px-3 py-1 text-sm font-bold text-slate-700 hover:bg-slate-100"
+                                    data-command="bold">B</button>
+                                <button type="button"
+                                    class="about-tool rounded-md border border-slate-200 px-3 py-1 text-sm italic text-slate-700 hover:bg-slate-100"
+                                    data-command="italic">I</button>
+                                <button type="button"
+                                    class="about-tool rounded-md border border-slate-200 px-3 py-1 text-sm underline text-slate-700 hover:bg-slate-100"
+                                    data-command="underline">U</button>
+                                <button type="button"
+                                    class="about-tool rounded-md border border-slate-200 px-3 py-1 text-sm text-slate-700 hover:bg-slate-100"
+                                    data-command="insertUnorderedList">• List</button>
+                                <button type="button"
+                                    class="about-tool rounded-md border border-slate-200 px-3 py-1 text-sm text-slate-700 hover:bg-slate-100"
+                                    data-command="insertOrderedList">1. List</button>
+                                <button type="button"
+                                    class="about-tool rounded-md border border-slate-200 px-3 py-1 text-sm text-slate-700 hover:bg-slate-100"
+                                    data-block="h2">H2</button>
+                                <button type="button"
+                                    class="about-tool rounded-md border border-slate-200 px-3 py-1 text-sm text-slate-700 hover:bg-slate-100"
+                                    data-block="h3">H3</button>
+                                <button type="button"
+                                    class="about-tool rounded-md border border-slate-200 px-3 py-1 text-sm text-slate-700 hover:bg-slate-100"
+                                    data-link="1">Link</button>
+                                <button type="button"
+                                    class="about-clear rounded-md border border-rose-200 px-3 py-1 text-sm text-rose-700 hover:bg-rose-50">Clear</button>
+                            </div>
+
+                            <div id="aboutEditor" contenteditable="true"
+                                class="min-h-[420px] w-full rounded-lg border border-slate-200 bg-white p-4 text-slate-900 outline-none focus:border-sky-300 focus:ring-2 focus:ring-sky-100">
+                            </div>
+
+                            <textarea id="aboutContentInput" wire:model.defer="aboutContent" class="hidden"></textarea>
+                        </div>
+                    </div>
+
+                    <div>
+                        <button type="button" wire:click="saveAboutContent"
+                            class="rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700">
+                            Save About Content
+                        </button>
+                    </div>
+                </div>
+            @else
+                <div class="admin-card p-6 text-slate-600">
+                    Section <span class="font-semibold text-slate-900">{{ $pageTitle }}</span> ke liye content yahan
+                    add kar sakte hain.
+                </div>
+            @endif
         </section>
     </main>
 </div>
+
+@if ($isAboutPage)
+    <script>
+        document.addEventListener('livewire:init', () => {
+            const editor = document.getElementById('aboutEditor');
+            const hiddenInput = document.getElementById('aboutContentInput');
+
+            if (!editor || !hiddenInput) {
+                return;
+            }
+
+            const syncValue = () => {
+                hiddenInput.value = editor.innerHTML;
+                hiddenInput.dispatchEvent(new Event('input', {
+                    bubbles: true
+                }));
+            };
+
+            editor.innerHTML = hiddenInput.value || '';
+
+            editor.addEventListener('input', syncValue);
+
+            document.querySelectorAll('.about-tool').forEach((button) => {
+                button.addEventListener('click', () => {
+                    const command = button.dataset.command;
+                    const block = button.dataset.block;
+                    const addLink = button.dataset.link;
+
+                    editor.focus();
+
+                    if (command) {
+                        document.execCommand(command, false, null);
+                    } else if (block) {
+                        document.execCommand('formatBlock', false, block);
+                    } else if (addLink) {
+                        const url = window.prompt('Enter URL');
+                        if (url) {
+                            document.execCommand('createLink', false, url);
+                        }
+                    }
+
+                    syncValue();
+                });
+            });
+
+            const clearButton = document.querySelector('.about-clear');
+            if (clearButton) {
+                clearButton.addEventListener('click', () => {
+                    editor.innerHTML = '';
+                    syncValue();
+                });
+            }
+
+            Livewire.hook('morph.updated', () => {
+                if (editor.innerHTML !== (hiddenInput.value || '')) {
+                    editor.innerHTML = hiddenInput.value || '';
+                }
+            });
+        });
+    </script>
+@endif
