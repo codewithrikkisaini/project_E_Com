@@ -25,6 +25,8 @@ class Index extends Component
 
     public string $name = '';
 
+    public string $slug = '';
+
     public ?int $editingId = null;
 
     public function updatingSearch(): void
@@ -49,6 +51,7 @@ class Index extends Component
 
         $this->editingId = $category->id;
         $this->name = $category->name;
+        $this->slug = $category->slug;
         $this->showFormModal = true;
     }
 
@@ -59,6 +62,13 @@ class Index extends Component
 
     public function saveCategory(): void
     {
+        $this->name = trim($this->name);
+        $this->slug = Str::slug($this->slug);
+
+        if ($this->slug === '') {
+            $this->slug = Str::slug($this->name);
+        }
+
         $validated = $this->validate([
             'name' => [
                 'required',
@@ -66,15 +76,17 @@ class Index extends Component
                 'max:255',
                 Rule::unique('blog_categories', 'name')->ignore($this->editingId),
             ],
+            'slug' => [
+                'required',
+                'string',
+                'max:255',
+                'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
+                Rule::unique('blog_categories', 'slug')->ignore($this->editingId),
+            ],
         ]);
 
-        $slug = Str::slug($validated['name']);
-
-        if ($slug === '') {
-            $slug = Str::random(8);
-        }
-
-        $baseSlug = $slug;
+        $baseSlug = $validated['slug'];
+        $slug = $baseSlug;
         $counter = 1;
 
         while (
@@ -137,6 +149,7 @@ class Index extends Component
         $this->resetValidation();
         $this->editingId = null;
         $this->name = '';
+        $this->slug = '';
     }
 
     private function resetPageIfNeeded(): void

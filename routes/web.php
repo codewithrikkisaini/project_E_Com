@@ -1,19 +1,54 @@
 <?php
 
-use App\Livewire\Admin\Dashboard;
 use App\Livewire\Admin\BlogCategory\Index\Index as BlogCategoryIndex;
+use App\Livewire\Admin\Dashboard;
 use App\Livewire\Admin\Order\Index\Index as OrderIndex;
 use App\Livewire\Admin\PaymentSettings\Form\Form as PaymentSettingsForm;
 use App\Livewire\Admin\Settings\Form\Form as SettingsForm;
 use App\Livewire\Admin\Testimonial\Form\Form as TestimonialForm;
 use App\Livewire\Admin\User\Index\Index as UserIndex;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
+Route::view('/', 'pages.home')->name('home');
+Route::view('/about', 'pages.about')->name('about');
+Route::view('/services', 'pages.services')->name('services');
+Route::view('/contact', 'pages.contact')->name('contact');
+
+Route::middleware('guest')->group(function () {
+    Route::get('/login', function () {
+        return view('auth.login');
+    })->name('login');
+
+    Route::post('/login', function (Request $request) {
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required', 'string'],
+        ]);
+
+        if (Auth::attempt($credentials, $request->boolean('remember'))) {
+            $request->session()->regenerate();
+
+            return redirect()->intended(route('admin.dashboard'));
+        }
+
+        return back()
+            ->withErrors(['email' => 'Invalid email or password.'])
+            ->onlyInput('email');
+    })->name('login.store');
 });
 
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::post('/logout', function (Request $request) {
+    Auth::logout();
+
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    return redirect()->route('home');
+})->middleware('auth')->name('logout');
+
+Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
 
     Route::livewire('/products', 'admin.product.form.form')->name('products');

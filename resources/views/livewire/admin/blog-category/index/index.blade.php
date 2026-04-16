@@ -1,100 +1,5 @@
 <div class="admin-shell min-h-screen bg-slate-100 lg:flex">
-    <aside class="w-full border-r border-slate-200 bg-white lg:sticky lg:top-0 lg:h-screen lg:w-72">
-        <div class="border-b border-slate-100 px-6 py-5">
-            <h2 class="text-xl font-bold text-slate-800">NM</h2>
-            <h1 class="text-sm font-medium text-slate-600">Dashboard</h1>
-            <p class="text-xs text-gray-400">Nick's & Morris</p>
-        </div>
-
-        @php
-            $active = fn($path) => request()->is($path)
-                ? 'bg-gray-100 text-gray-900'
-                : 'text-gray-700 hover:bg-gray-100';
-        @endphp
-
-        <nav class="flex-1 space-y-2 overflow-y-auto px-4 py-6">
-            <a href="{{ url('/admin/dashboard') }}"
-                class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/dashboard*') }}">
-                <span>🏠</span>
-                <span class="font-semibold">Dashboard</span>
-            </a>
-
-            <a href="{{ url('/admin/products') }}"
-                class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/products*') }}">
-                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M4 6a2 2 0 012-2h12a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V6z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5v4M15 5v4" />
-                </svg>
-                <span>Products</span>
-            </a>
-
-            <a href="{{ url('/admin/banner') }}"
-                class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/banner*') }}">
-                <span>🖼</span>
-                <span>Banner</span>
-            </a>
-
-            <a href="{{ url('/admin/about') }}"
-                class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/about*') }}">
-                <span>ℹ</span>
-                <span>About</span>
-            </a>
-
-            <a href="{{ url('/admin/testimonials') }}"
-                class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/testimonials*') }}">
-                <span>💬</span>
-                <span>Testimonials</span>
-            </a>
-
-            <a href="{{ url('/admin/orders') }}"
-                class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/orders*') }}">
-                <span>📑</span>
-                <span>Orders</span>
-            </a>
-
-            <a href="{{ url('/admin/users') }}"
-                class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/users*') }}">
-                <span>👤</span>
-                <span>Users</span>
-            </a>
-
-            <a href="{{ url('/admin/payment-settings') }}"
-                class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/payment-settings*') }}">
-                <span>💳</span>
-                <span>QR Payment</span>
-            </a>
-
-            <a href="{{ url('/admin/settings') }}"
-                class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/settings*') }}">
-                <span>⚙</span>
-                <span>Settings</span>
-            </a>
-
-            <div x-data="{ open: true }">
-                <button @click="open = !open"
-                    class="flex w-full items-center justify-between px-4 py-3 text-gray-700 transition hover:bg-gray-100">
-                    <div class="flex items-center gap-3">
-                        <span>📝</span>
-                        <span>Blogs</span>
-                    </div>
-
-                    <span :class="open && 'rotate-180'">⌄</span>
-                </button>
-
-                <div x-show="open" class="mt-2 space-y-2 pl-8">
-                    <a href="{{ url('/admin/blog-categories') }}"
-                        class="block rounded-lg px-4 py-2 text-sm {{ $active('admin/blog-categories*') }}">
-                        Categories
-                    </a>
-
-                    <a href="{{ url('/admin/blogs') }}" class="block rounded-lg px-4 py-2 text-sm {{ $active('admin/blogs*') }}">
-                        Blogs
-                    </a>
-                </div>
-            </div>
-        </nav>
-    </aside>
+    @include('livewire.admin.partials.sidebar')
 
     <main class="flex-1 p-4 lg:p-8">
         <div class="space-y-5">
@@ -207,35 +112,51 @@
 
     @if ($showFormModal)
         <div class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4">
-            <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
-                <div class="mb-4 flex items-start justify-between">
-                    <div>
-                        <h2 class="text-xl font-semibold text-slate-900">{{ $editingId ? 'Edit Category' : 'Create Category' }}</h2>
-                        <p class="text-sm text-slate-500">Blog category details</p>
+            <div class="w-full max-w-xl overflow-hidden rounded-3xl bg-white shadow-2xl">
+                <div class="flex items-center justify-between bg-gradient-to-r from-blue-700 to-blue-500 px-7 py-6">
+                    <div class="flex items-center gap-4">
+                        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-800/40 text-white">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <h2 class="text-[38px] font-semibold leading-none text-white">{{ $editingId ? 'Edit Category' : 'Create Category' }}</h2>
                     </div>
-                    <button type="button" wire:click="closeModal" class="text-slate-400 transition hover:text-slate-700">✕</button>
+                    <button type="button" wire:click="closeModal" class="text-3xl leading-none text-white/80 transition hover:text-white">×</button>
                 </div>
 
-                <div class="space-y-4">
+                <div class="space-y-6 p-7">
                     <div>
-                        <label class="mb-1 block text-sm font-medium text-slate-700">Name</label>
-                        <input type="text" wire:model.defer="name" placeholder="Enter category name"
-                            class="w-full rounded-xl border border-slate-200 px-3 py-2.5 text-sm outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100" />
+                        <label class="mb-2 block text-xl font-semibold text-slate-700">Category Name</label>
+                        <input type="text" wire:model.defer="name" placeholder="e.g., Technology"
+                            class="w-full rounded-2xl border border-slate-300 px-5 py-3 text-[34px] leading-tight text-slate-700 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100" />
                         @error('name')
-                            <p class="mt-1 text-xs text-rose-600">{{ $message }}</p>
+                            <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
                         @enderror
                     </div>
-                </div>
 
-                <div class="mt-6 flex justify-end gap-2">
-                    <button type="button" wire:click="closeModal"
-                        class="rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50">
-                        Cancel
-                    </button>
-                    <button type="button" wire:click="saveCategory"
-                        class="rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700">
-                        {{ $editingId ? 'Update' : 'Create' }}
-                    </button>
+                    <div>
+                        <label class="mb-2 block text-xl font-semibold text-slate-700">Slug</label>
+                        <input type="text" wire:model.defer="slug" placeholder="e.g., technology"
+                            class="w-full rounded-2xl border border-slate-300 px-5 py-3 text-[34px] leading-tight text-slate-700 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100" />
+                        @error('slug')
+                            <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="mt-2 grid grid-cols-2 gap-4">
+                        <button type="button" wire:click="closeModal"
+                            class="inline-flex items-center justify-center gap-2 rounded-2xl bg-red-600 px-4 py-3 text-[34px] font-semibold leading-none text-white transition hover:bg-red-700">
+                            <span>×</span>
+                            <span class="text-[32px]">Cancel</span>
+                        </button>
+                        <button type="button" wire:click="saveCategory"
+                            class="inline-flex items-center justify-center gap-2 rounded-2xl bg-blue-600 px-4 py-3 text-[34px] font-semibold leading-none text-white transition hover:bg-blue-700">
+                            <span>✓</span>
+                            <span class="text-[32px]">Save Category</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
