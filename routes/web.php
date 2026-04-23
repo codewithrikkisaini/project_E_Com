@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Admin\BlogCategory\Index\Index as BlogCategoryIndex;
+use App\Livewire\Admin\Banner\Form\Form as BannerForm;
 use App\Livewire\Admin\Dashboard;
 use App\Livewire\Admin\Order\Index\Index as OrderIndex;
 use App\Livewire\Admin\PaymentSettings\Form\Form as PaymentSettingsForm;
@@ -11,10 +12,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'pages.home')->name('home');
-Route::view('/about', 'pages.about')->name('about');
-Route::view('/services', 'pages.services')->name('services');
-Route::view('/contact', 'pages.contact')->name('contact');
+Route::view('/', 'home')->name('home');
+Route::view('/products', 'products')->name('products');
+Route::view('/about', 'about')->name('about');
+Route::view('/blog', 'blog')->name('blog');
+Route::view('/contact', 'contact')->name('contact');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', function () {
@@ -55,7 +57,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::redirect('/product/create', '/admin/products')->name('product.create');
     Route::livewire('/product/{product}/edit', 'admin.product.form.form')->name('product.edit');
 
-    Route::get('/banner', Dashboard::class)->name('banner');
+    Route::get('/banner', BannerForm::class)->name('banner');
     Route::get('/services', Dashboard::class)->name('services');
     Route::get('/about', Dashboard::class)->name('about');
     Route::get('/testimonials', TestimonialForm::class)->name('testimonials');

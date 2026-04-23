@@ -1,23 +1,22 @@
 @extends('layouts.public')
 
 @section('content')
-<section class="rounded-3xl border border-white/10 bg-white/5 p-8 md:p-12">
-    <p class="text-xs font-bold tracking-[0.18em] text-cyan-200">ABOUT US</p>
-    <h1 class="mt-3 text-4xl font-black sm:text-5xl">Hum Digital Commerce ko Simple banate hain</h1>
-    <p class="mt-5 max-w-3xl text-slate-300">Hamari team ka focus hai ki business owners bina technical tension ke online sell kar saken. Fast design, practical features aur strong admin control ke saath hum growth-ready solutions banate hain.</p>
+<section class="mx-auto w-full max-w-6xl px-4 pb-12 pt-14 sm:px-6">
+    <h1 class="text-center text-5xl font-bold text-slate-900">About Us</h1>
+    <p class="mx-auto mt-4 max-w-3xl text-center text-base leading-7 text-slate-600">Admin is a trusted pharmaceutical distribution partner focused on quality medicines, reliable service, and long-term healthcare impact across India.</p>
 
-    <div class="mt-8 grid gap-4 md:grid-cols-3">
-        <div class="rounded-2xl border border-white/10 bg-slate-900/60 p-5">
-            <h2 class="font-bold text-cyan-200">Vision</h2>
-            <p class="mt-2 text-sm text-slate-300">Har local brand ko global-ready ecommerce presence dena.</p>
+    <div class="mt-10 grid gap-5 md:grid-cols-3">
+        <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <h2 class="text-lg font-semibold text-slate-900">Our Vision</h2>
+            <p class="mt-3 text-sm leading-6 text-slate-600">To become the most trusted and transparent medicine partner for retailers, hospitals, and healthcare professionals nationwide.</p>
         </div>
-        <div class="rounded-2xl border border-white/10 bg-slate-900/60 p-5">
-            <h2 class="font-bold text-cyan-200">Mission</h2>
-            <p class="mt-2 text-sm text-slate-300">Design + technology ka best mix dekar online sales boost karna.</p>
+        <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <h2 class="text-lg font-semibold text-slate-900">Our Mission</h2>
+            <p class="mt-3 text-sm leading-6 text-slate-600">Deliver quality products, expert support, and efficient distribution while ensuring compliance, affordability, and customer-first service.</p>
         </div>
-        <div class="rounded-2xl border border-white/10 bg-slate-900/60 p-5">
-            <h2 class="font-bold text-cyan-200">Approach</h2>
-            <p class="mt-2 text-sm text-slate-300">Simple UX, secure login flow, aur scalable backend architecture.</p>
+        <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <h2 class="text-lg font-semibold text-slate-900">Our Promise</h2>
+            <p class="mt-3 text-sm leading-6 text-slate-600">Every order is handled with care, consistency, and accountability so partners can focus on patient care and business growth.</p>
         </div>
     </div>
 </section>

@@ -1,26 +1,45 @@
 @extends('layouts.public')
 
 @section('content')
-<section>
-    <p class="text-xs font-bold tracking-[0.18em] text-cyan-200">SERVICES</p>
-    <h1 class="mt-3 text-4xl font-black sm:text-5xl">Aapke business ke liye complete service stack</h1>
+<section class="mx-auto w-full max-w-6xl px-4 pb-14 pt-14 sm:px-6">
+    <h1 class="text-center text-5xl font-bold text-slate-900">Buy Products</h1>
+    <p class="mx-auto mt-4 max-w-2xl text-center text-slate-600">Choose from trusted pharmaceutical products and place your order with a simple checkout flow.</p>
 
-    <div class="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-        <article class="rounded-2xl border border-cyan-300/20 bg-cyan-500/10 p-5">
-            <h2 class="text-lg font-bold">Store Setup</h2>
-            <p class="mt-2 text-sm text-slate-300">Product catalog, pricing, and category setup with clean UI.</p>
+    <div class="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        <article class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=900&q=80" alt="Product one" class="h-56 w-full object-cover">
+            <div class="p-5">
+                <h2 class="text-lg font-semibold">NeuroBoost Elite</h2>
+                <p class="mt-2 text-sm text-slate-600">Advanced cognitive support with balanced ingredients.</p>
+                <div class="mt-4 flex items-center justify-between">
+                    <span class="text-base font-semibold text-slate-900">₹1200</span>
+                    <a href="{{ route('contact') }}" class="rounded-lg bg-[#22c55e] px-4 py-2 text-sm font-semibold text-white">Order</a>
+                </div>
+            </div>
         </article>
-        <article class="rounded-2xl border border-emerald-300/20 bg-emerald-500/10 p-5">
-            <h2 class="text-lg font-bold">Admin Panel</h2>
-            <p class="mt-2 text-sm text-slate-300">Login ke baad secure backend dashboard for complete control.</p>
+
+        <article class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <img src="https://images.unsplash.com/photo-1631549916768-4119b4123a31?auto=format&fit=crop&w=900&q=80" alt="Product two" class="h-56 w-full object-cover">
+            <div class="p-5">
+                <h2 class="text-lg font-semibold">Nf-Xiverin 200</h2>
+                <p class="mt-2 text-sm text-slate-600">Sustained release capsules crafted for reliable outcomes.</p>
+                <div class="mt-4 flex items-center justify-between">
+                    <span class="text-base font-semibold text-slate-900">₹980</span>
+                    <a href="{{ route('contact') }}" class="rounded-lg bg-[#22c55e] px-4 py-2 text-sm font-semibold text-white">Order</a>
+                </div>
+            </div>
         </article>
-        <article class="rounded-2xl border border-amber-300/20 bg-amber-500/10 p-5">
-            <h2 class="text-lg font-bold">Order Management</h2>
-            <p class="mt-2 text-sm text-slate-300">Orders track, status manage, and customer handling workflows.</p>
-        </article>
-        <article class="rounded-2xl border border-fuchsia-300/20 bg-fuchsia-500/10 p-5">
-            <h2 class="text-lg font-bold">Brand Design</h2>
-            <p class="mt-2 text-sm text-slate-300">Creative sections, trust-building visuals, and conversion-driven layout.</p>
+
+        <article class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <img src="https://images.unsplash.com/photo-1584362917165-526a968579e8?auto=format&fit=crop&w=900&q=80" alt="Product three" class="h-56 w-full object-cover">
+            <div class="p-5">
+                <h2 class="text-lg font-semibold">GlucoShield Plus</h2>
+                <p class="mt-2 text-sm text-slate-600">Daily diabetes support designed for modern routines.</p>
+                <div class="mt-4 flex items-center justify-between">
+                    <span class="text-base font-semibold text-slate-900">₹760</span>
+                    <a href="{{ route('contact') }}" class="rounded-lg bg-[#22c55e] px-4 py-2 text-sm font-semibold text-white">Order</a>
+                </div>
+            </div>
         </article>
     </div>
 </section>
