@@ -163,6 +163,6 @@ class Form extends Component
     public function render()
     {
         return view('livewire.admin.settings.form.form')
-            ->layout('layouts.app');
+            ->layout('layouts.admin');
     }
 }

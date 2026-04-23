@@ -118,7 +118,7 @@ class Index extends Component
 
         return view('livewire.admin.order.index.index', [
             'orders' => $orders,
-        ])->layout('layouts.app');
+        ])->layout('layouts.admin');
     }
 
     private function emptyOrdersPaginator(): LengthAwarePaginator

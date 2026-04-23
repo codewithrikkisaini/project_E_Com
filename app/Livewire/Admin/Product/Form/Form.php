@@ -170,7 +170,7 @@ class Form extends Component
         return view('livewire.admin.product.form.form', [
             'products' => $products,
         ])
-            ->layout('layouts.app');
+            ->layout('layouts.admin');
     }
 
     private function emptyProductsPaginator(): LengthAwarePaginator

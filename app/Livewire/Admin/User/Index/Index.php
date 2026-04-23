@@ -59,7 +59,7 @@ class Index extends Component
         return view('livewire.admin.user.index.index', [
             'users' => $users,
             'totalUsers' => $totalUsers,
-        ])->layout('layouts.app');
+        ])->layout('layouts.admin');
     }
 
     private function emptyUsersPaginator(): LengthAwarePaginator

@@ -141,7 +141,7 @@ class Index extends Component
         return view('livewire.admin.blog-category.index.index', [
             'categories' => $categories,
             'totalCategories' => $totalCategories,
-        ])->layout('layouts.app');
+        ])->layout('layouts.admin');
     }
 
     private function resetForm(): void
