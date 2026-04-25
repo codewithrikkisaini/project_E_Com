@@ -215,7 +215,7 @@
                                 class="min-h-[420px] w-full rounded-lg border border-slate-200 bg-white p-4 text-slate-900 outline-none focus:border-sky-300 focus:ring-2 focus:ring-sky-100">
                             </div>
 
-                            <textarea id="aboutContentInput" wire:model.defer="aboutContent" class="hidden"></textarea>
+                            <textarea id="aboutContentInput" wire:model="aboutContent" class="hidden"></textarea>
                         </div>
                     </div>
 

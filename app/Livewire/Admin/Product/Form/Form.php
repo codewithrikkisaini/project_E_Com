@@ -130,7 +130,7 @@ class Form extends Component
             session()->flash('success', 'Product created successfully.');
         }
 
-        return $this->redirectRoute('admin.products', navigate: true);
+        $this->createNew();
     }
 
     public function delete(int $id): void
@@ -144,8 +144,7 @@ class Form extends Component
         $product->delete();
 
         if ($this->product?->id === $id) {
-            $this->redirectRoute('admin.products', navigate: true);
-            return;
+            $this->createNew();
         }
 
         session()->flash('success', 'Product deleted successfully.');
@@ -170,7 +169,7 @@ class Form extends Component
         return view('livewire.admin.product.form.form', [
             'products' => $products,
         ])
-            ->layout('layouts.app');
+            ->layout('layouts.admin');
     }
 
     private function emptyProductsPaginator(): LengthAwarePaginator

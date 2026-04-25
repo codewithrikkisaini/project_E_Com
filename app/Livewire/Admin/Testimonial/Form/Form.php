@@ -127,7 +127,7 @@ class Form extends Component
 
         return view('livewire.admin.testimonial.form.form', [
             'testimonials' => $testimonials,
-        ])->layout('layouts.app');
+        ])->layout('layouts.admin');
     }
 
     private function emptyTestimonialsPaginator(): LengthAwarePaginator

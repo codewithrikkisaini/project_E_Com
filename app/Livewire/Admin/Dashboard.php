@@ -79,7 +79,13 @@ class Dashboard extends Component
 
     public function render()
     {
+        try {
+            Schema::hasTable('site_settings');
+        } catch (\Exception $e) {
+            session()->now('error', 'Database connection failed. Please visit /setup-db and then /migrate to fix it.');
+        }
+
         return view('livewire.admin.dashboard')
-            ->layout('layouts.app');
+            ->layout('layouts.admin');
     }
 }
