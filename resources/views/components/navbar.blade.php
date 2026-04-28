@@ -50,9 +50,19 @@
 
             <!-- Action Buttons -->
             <div class="hidden md:flex items-center gap-4">
-                <a href="{{ route('login') }}" class="px-6 py-2.5 border-2 border-slate-800 text-slate-800 text-xs font-black uppercase tracking-widest rounded-full hover:bg-slate-800 hover:text-white transition-all duration-300">
-                    Login
-                </a>
+                @guest
+                    <a href="{{ route('login') }}" class="px-6 py-2.5 border-2 border-slate-800 text-slate-800 text-xs font-black uppercase tracking-widest rounded-full hover:bg-slate-800 hover:text-white transition-all duration-300">
+                        Login
+                    </a>
+                @endguest
+                @auth
+                    <form method="POST" action="{{ route('logout') }}" class="inline">
+                        @csrf
+                        <button type="submit" class="px-6 py-2.5 border-2 border-rose-600 text-rose-600 text-xs font-black uppercase tracking-widest rounded-full hover:bg-rose-600 hover:text-white transition-all duration-300">
+                            Logout
+                        </button>
+                    </form>
+                @endauth
                 <a href="{{ route('products') }}" class="px-7 py-3 bg-[#6b624b] text-white text-xs font-black uppercase tracking-widest rounded-full hover:bg-green-900 transition-all duration-300 shadow-lg shadow-slate-200">
                     Buy Now
                 </a>

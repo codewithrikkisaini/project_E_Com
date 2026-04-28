@@ -1,124 +1,114 @@
-<div class="admin-shell min-h-screen bg-slate-100 lg:flex">
-    <aside class="w-full border-r border-slate-200 bg-white lg:sticky lg:top-0 lg:h-screen lg:w-72">
-        <div class="border-b border-slate-100 px-6 py-5">
-            <h2 class="text-xl font-bold text-slate-800">NM</h2>
-            <h1 class="text-sm font-medium text-slate-600">Dashboard</h1>
-            <p class="text-xs text-gray-400">Nick's & Morris</p>
-        </div>
-
-        @php
-            $active = fn($path) => request()->is($path) ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-100';
-        @endphp
-
-        <nav class="flex-1 space-y-2 overflow-y-auto px-4 py-6">
-            <a href="{{ url('/admin/dashboard') }}" class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/dashboard*') }}">
-                <span>🏠</span>
-                <span class="font-semibold">Dashboard</span>
-            </a>
-            <a href="{{ url('/admin/products') }}" class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/products*') }}">
-                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M4 6a2 2 0 012-2h12a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V6z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5v4M15 5v4" />
-                </svg>
-                <span>Products</span>
-            </a>
-            <a href="{{ url('/admin/banner') }}" class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/banner*') }}"><span>🖼</span><span>Banner</span></a>
-            <a href="{{ url('/admin/services') }}" class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/services*') }}"><span>🧰</span><span>Services</span></a>
-            <a href="{{ url('/admin/about') }}" class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/about*') }}"><span>ℹ</span><span>About</span></a>
-            <a href="{{ url('/admin/testimonials') }}" class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/testimonials*') }}"><span>💬</span><span>Testimonials</span></a>
-            <a href="{{ url('/admin/orders') }}" class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/orders*') }}"><span>📑</span><span>Orders</span></a>
-            <a href="{{ url('/admin/users') }}" class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/users*') }}"><span>👤</span><span>Users</span></a>
-            <a href="{{ url('/admin/payment-settings') }}" class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/payment-settings*') }}"><span>💳</span><span>QR Payment</span></a>
-            <a href="{{ url('/admin/settings') }}" class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/settings*') }}"><span>⚙</span><span>Settings</span></a>
-            <a href="{{ url('/admin/blogs') }}" class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/blogs*') }}"><span>📝</span><span>Blogs</span></a>
-            <a href="{{ url('/admin/enquiries?type=general') }}"
-                class="flex items-center gap-3 px-4 py-3 transition {{ request()->fullUrlIs('*type=general*') ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-100' }}">
-                <span>📩</span>
-                <span>General Enquiry</span>
-            </a>
-            <a href="{{ url('/admin/enquiries?type=product') }}"
-                class="flex items-center gap-3 px-4 py-3 transition {{ request()->fullUrlIs('*type=product*') ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-100' }}">
-                <span>📦</span>
-                <span>Product Enquiry</span>
-            </a>
-            <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-700 transition hover:bg-red-50 hover:text-red-600">
-                <span>🚪</span><span>Logout</span>
-            </a>
-        </nav>
-    </aside>
+<div class="admin-shell min-h-screen bg-slate-50 lg:flex">
+    <x-admin.sidebar />
 
     <main class="flex-1">
-        <header class="border-b border-slate-200 bg-white px-4 py-3 lg:px-8">
-            <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                <h1 class="text-3xl font-semibold text-slate-900 lg:text-[42px] lg:leading-none">QR Payment Settings</h1>
-                <div class="flex items-center gap-3">
-                    <div class="relative">
-                        <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-xl text-slate-400">⌕</span>
-                        <input type="text" placeholder="Search..."
-                            class="w-72 rounded-2xl border border-slate-200 bg-slate-100 py-2.5 pl-11 pr-4 text-sm text-slate-700 outline-none transition focus:border-cyan-400 focus:bg-white focus:ring-2 focus:ring-cyan-100" />
+        <!-- Premium Header -->
+        <header class="sticky top-0 z-40 border-b border-slate-200/60 bg-white/80 backdrop-blur-md px-4 py-4 lg:px-10 shrink-0">
+            <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                <div>
+                    <h1 class="text-2xl font-black text-slate-900 tracking-tight lg:text-3xl">Fintech <span class="text-indigo-600">Gateway</span></h1>
+                    <div class="flex items-center gap-2 mt-1 text-xs font-bold text-slate-500 uppercase tracking-widest">
+                        <span>Admin</span>
+                        <i class="fas fa-chevron-right text-[8px]"></i>
+                        <span class="text-indigo-500">Transaction Protocol</span>
                     </div>
-                    <button type="button" class="rounded-full p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-700">🔔</button>
-                    <div class="flex h-10 w-10 items-center justify-center rounded-full bg-sky-600 text-sm font-semibold text-white">AU</div>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 border border-slate-200">
+                        <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest italic">Secure Node</span>
+                    </div>
+                    <div class="flex items-center gap-2 border-l border-slate-200 pl-4">
+                        <button type="button" class="relative rounded-xl p-2.5 text-slate-500 transition hover:bg-slate-100 hover:text-indigo-600">
+                            <i class="fas fa-shield-alt text-lg"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </header>
 
-        <section class="space-y-6 p-4 lg:p-8">
-            <div class="mx-auto max-w-5xl space-y-6">
-                <div>
-                    <h2 class="text-2xl font-bold text-slate-900">QR Payment Settings</h2>
-                    <p class="text-sm text-slate-500">Upload QR and write payment instructions shown on checkout page.</p>
+        <section class="p-4 lg:p-10">
+            <div class="mx-auto max-w-4xl space-y-10">
+                <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+                    <div>
+                        <h2 class="text-3xl font-black text-slate-900 tracking-tight">QR <span class="text-indigo-600">Settlement</span></h2>
+                        <p class="mt-2 text-slate-500 font-medium">Configure digital collection assets and customer remittance instructions.</p>
+                    </div>
                 </div>
 
                 @if (session('success'))
-                    <div class="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                    <div class="rounded-2xl border border-emerald-100 bg-emerald-50/50 p-4 flex items-center gap-3 text-sm font-bold text-emerald-700 shadow-sm">
+                        <div class="h-8 w-8 rounded-lg bg-emerald-500 flex items-center justify-center text-white">
+                            <i class="fas fa-check"></i>
+                        </div>
                         {{ session('success') }}
                     </div>
                 @endif
 
-                @if (session('error'))
-                    <div class="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
-                        {{ session('error') }}
-                    </div>
-                @endif
+                <div class="rounded-[2.5rem] border border-slate-200 bg-white p-8 lg:p-12 shadow-2xl shadow-slate-200/50">
+                    <form wire:submit="save" class="space-y-12">
+                        <!-- QR Asset Section -->
+                        <div class="space-y-8">
+                            <div class="flex items-center gap-3">
+                                <div class="h-1 w-12 bg-indigo-600 rounded-full"></div>
+                                <h3 class="text-xs font-black uppercase tracking-[0.3em] text-slate-400">Payment Asset</h3>
+                            </div>
+                            
+                            <div class="flex flex-col lg:flex-row items-center gap-10">
+                                <div class="relative group cursor-pointer w-full lg:w-auto">
+                                    <div class="h-56 w-56 rounded-[2.5rem] bg-slate-50 border-2 border-dashed border-slate-200 flex flex-col items-center justify-center overflow-hidden transition-all group-hover:border-indigo-400 group-hover:bg-indigo-50/30">
+                                        @if ($qrImage)
+                                            <img src="{{ $qrImage->temporaryUrl() }}" class="h-full w-full object-contain p-4" />
+                                        @elseif($existingQrImage)
+                                            <img src="{{ asset('storage/' . $existingQrImage) }}" class="h-full w-full object-contain p-4" />
+                                        @else
+                                            <i class="fas fa-qrcode text-slate-200 text-5xl mb-3"></i>
+                                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Awaiting File</span>
+                                        @endif
+                                        <input type="file" wire:model="qrImage" class="absolute inset-0 opacity-0 cursor-pointer" />
+                                    </div>
+                                    @error('qrImage') <p class="mt-3 text-center text-xs font-bold text-rose-500">{{ $message }}</p> @enderror
+                                </div>
 
-                <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm lg:p-8">
-                    <form wire:submit="save" class="space-y-6">
-                        <div>
-                            <label class="mb-1.5 block text-sm font-medium text-slate-700">QR Image</label>
-                            <input type="file" wire:model="qrImage" accept="image/png,image/jpeg,image/webp"
-                                class="block w-full rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-3 text-sm file:mr-4 file:rounded-lg file:border-0 file:bg-blue-600 file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-white" />
-                            @error('qrImage')
-                                <p class="mt-1 text-xs text-rose-600">{{ $message }}</p>
-                            @enderror
-
-                            @if ($qrImage)
-                                <img src="{{ $qrImage->temporaryUrl() }}" alt="QR Preview"
-                                    class="mt-3 h-36 w-36 rounded-xl border border-slate-200 object-cover" />
-                            @elseif($existingQrImage)
-                                <img src="{{ asset('storage/' . $existingQrImage) }}" alt="Current QR"
-                                    class="mt-3 h-36 w-36 rounded-xl border border-slate-200 object-cover" />
-                            @endif
+                                <div class="flex-1 space-y-4 text-center lg:text-left">
+                                    <h4 class="text-xl font-black text-slate-900 tracking-tight">QR Signature Code</h4>
+                                    <p class="text-sm font-medium text-slate-500 leading-relaxed">Upload your official UPI or banking QR code. This will be presented to users during the checkout phase to facilitate instant transfers.</p>
+                                    <div class="pt-4 flex flex-wrap justify-center lg:justify-start gap-3">
+                                        <span class="px-4 py-2 rounded-xl bg-slate-100 text-[10px] font-black text-slate-500 uppercase tracking-widest">JPG</span>
+                                        <span class="px-4 py-2 rounded-xl bg-slate-100 text-[10px] font-black text-slate-500 uppercase tracking-widest">PNG</span>
+                                        <span class="px-4 py-2 rounded-xl bg-slate-100 text-[10px] font-black text-slate-500 uppercase tracking-widest">WEBP</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
-                        <div>
-                            <label class="mb-1.5 block text-sm font-medium text-slate-700">Instructions</label>
-                            <textarea wire:model.live="instructions" rows="6"
-                                class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm outline-none focus:border-blue-400 focus:bg-white"></textarea>
-                            @error('instructions')
-                                <p class="mt-1 text-xs text-rose-600">{{ $message }}</p>
-                            @enderror
+                        <!-- Instructions Section -->
+                        <div class="space-y-8">
+                            <div class="flex items-center gap-3">
+                                <div class="h-1 w-12 bg-indigo-600 rounded-full"></div>
+                                <h3 class="text-xs font-black uppercase tracking-[0.3em] text-slate-400">Payment Directives</h3>
+                            </div>
+                            
+                            <div>
+                                <label class="mb-4 block text-[10px] font-black uppercase tracking-widest text-slate-400">Remittance Guidelines</label>
+                                <textarea wire:model.live="instructions" rows="8" placeholder="Specify step-by-step payment verification steps..."
+                                    class="w-full rounded-3xl border-slate-200 bg-slate-50 px-6 py-6 text-base font-medium text-slate-600 outline-none transition focus:bg-white focus:ring-4 focus:ring-indigo-100 shadow-inner"></textarea>
+                                @error('instructions') <p class="mt-3 text-xs font-bold text-rose-500">{{ $message }}</p> @enderror
+                            </div>
                         </div>
 
-                        <div>
-                            <button type="submit" class="rounded-xl bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-blue-700">
-                                Save
+                        <div class="pt-10">
+                            <button type="submit" class="w-full rounded-[2rem] bg-indigo-600 py-6 text-sm font-black uppercase tracking-[0.3em] text-white shadow-2xl shadow-indigo-200 hover:bg-indigo-700 hover:-translate-y-1 transition-all duration-300">
+                                Commit Security Policy
                             </button>
                         </div>
                     </form>
                 </div>
             </div>
         </section>
+
+        <footer class="py-10 text-center">
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.7em]">Financial Engineering • Nexus Payment Core</p>
+        </footer>
     </main>
 </div>

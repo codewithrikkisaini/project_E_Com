@@ -28,6 +28,23 @@
     <x-navbar />
 
     <main>
+        @if(session('success'))
+            <div class="max-w-7xl mx-auto pt-24 pb-4 px-4 sm:px-6 lg:px-8 -mb-24 relative z-40">
+                <div class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl flex items-center gap-3 shadow-sm">
+                    <i class="fas fa-check-circle"></i>
+                    <span class="text-sm font-bold">{{ session('success') }}</span>
+                </div>
+            </div>
+        @endif
+        @if(session('error'))
+            <div class="max-w-7xl mx-auto pt-24 pb-4 px-4 sm:px-6 lg:px-8 -mb-24 relative z-40">
+                <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl flex items-center gap-3 shadow-sm">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span class="text-sm font-bold">{{ session('error') }}</span>
+                </div>
+            </div>
+        @endif
+
         {{ $slot }}
     </main>
 

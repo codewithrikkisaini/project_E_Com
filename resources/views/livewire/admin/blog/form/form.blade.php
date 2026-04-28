@@ -1,395 +1,263 @@
-<div class="admin-shell min-h-screen bg-[#F8FAFC] lg:flex">
-    <aside class="w-full border-r border-slate-200 bg-white lg:sticky lg:top-0 lg:h-screen lg:w-72">
-        <div class="border-b border-slate-100 px-6 py-5">
-            <h2 class="text-xl font-bold text-slate-800">NM</h2>
-            <h1 class="text-sm font-medium text-slate-600">Dashboard</h1>
-            <p class="text-xs text-gray-400">Nick's & Morris</p>
-        </div>
+<div class="admin-shell min-h-screen bg-slate-50 lg:flex">
+    <x-admin.sidebar />
 
-        @php
-            $active = fn($path) => request()->is($path) ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-100';
-        @endphp
-
-        <nav class="flex-1 space-y-2 overflow-y-auto px-4 py-6">
-            <a href="{{ url('/admin/dashboard') }}" class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/dashboard*') }}"><span>🏠</span><span class="font-semibold">Dashboard</span></a>
-            <a href="{{ url('/admin/products') }}" class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/products*') }}"><span>📦</span><span>Products</span></a>
-            <a href="{{ url('/admin/banner') }}" class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/banner*') }}"><span>🖼</span><span>Banner</span></a>
-            <a href="{{ url('/admin/services') }}" class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/services*') }}"><span>🧰</span><span>Services</span></a>
-            <a href="{{ url('/admin/about') }}" class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/about*') }}"><span>ℹ</span><span>About</span></a>
-            <a href="{{ url('/admin/testimonials') }}" class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/testimonials*') }}"><span>💬</span><span>Testimonials</span></a>
-            <a href="{{ url('/admin/orders') }}" class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/orders*') }}"><span>📑</span><span>Orders</span></a>
-            <a href="{{ url('/admin/users') }}" class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/users*') }}"><span>👤</span><span>Users</span></a>
-            <a href="{{ url('/admin/payment-settings') }}" class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/payment-settings*') }}"><span>💳</span><span>QR Payment</span></a>
-            <a href="{{ url('/admin/settings') }}" class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/settings*') }}"><span>⚙</span><span>Settings</span></a>
-            
-            <div x-data="{ open: {{ request()->is('admin/blog*') ? 'true' : 'false' }} }">
-                <button @click="open = !open" class="flex items-center justify-between w-full px-4 py-3 transition {{ request()->is('admin/blog*') ? 'bg-blue-600 text-white rounded-lg' : 'text-gray-700 hover:bg-gray-100' }}">
-                    <div class="flex items-center gap-3"><span>📝</span><span>Blog</span></div>
-                    <span :class="open && 'rotate-180'">⌄</span>
-                </button>
-                <div x-show="open" class="pl-8 mt-2 space-y-2">
-                    <a href="{{ url('/admin/blog-categories') }}" class="block rounded-lg px-4 py-2 text-sm {{ $active('admin/blog-categories*') }}">Categories</a>
-                    <a href="{{ url('/admin/blogs') }}" class="block rounded-lg px-4 py-2 text-sm {{ $active('admin/blogs*') }}">Blogs</a>
-                </div>
-            </div>
-
-            <a href="{{ url('/admin/enquiries?type=general') }}" class="flex items-center gap-3 px-4 py-3 transition {{ request()->fullUrlIs('*type=general*') ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-100' }}"><span>📩</span><span>General Enquiry</span></a>
-            <a href="{{ url('/admin/enquiries?type=product') }}" class="flex items-center gap-3 px-4 py-3 transition {{ request()->fullUrlIs('*type=product*') ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-100' }}"><span>📦</span><span>Product Enquiry</span></a>
-            <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-700 transition hover:bg-red-50 hover:text-red-600"><span>🚪</span><span>Logout</span></a>
-        </nav>
-    </aside>
-
-    <main class="flex-1 flex flex-col min-h-screen">
+    <main class="flex-1">
         @if($blogFormOpen)
-            <form wire:submit="save" class="flex-1 flex flex-col relative pb-24">
-                
-                <!-- Sticky Header -->
-                <div class="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-sm px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
-                    <div class="flex items-center gap-4">
-                        <button type="button" wire:click="closeForm" class="text-slate-400 hover:text-slate-600 transition">
-                            <i class="fas fa-chevron-left"></i>
-                        </button>
-                        <div>
-                            <h1 class="text-xl font-bold text-slate-800 flex items-center gap-2">
-                                ✨ {{ $blog ? 'Edit Blog Post' : 'Create New Blog Post' }}
-                            </h1>
-                            <p class="text-xs text-slate-500">Fill in the details below to publish your blog.</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Stepper -->
-                    <div class="hidden lg:flex items-center gap-4 text-xs font-semibold text-slate-500">
-                        <div class="flex items-center gap-2 text-blue-600"><span class="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px]">1</span> Basic Info</div>
-                        <i class="fas fa-chevron-right text-slate-300 text-[10px]"></i>
-                        <div class="flex items-center gap-2"><span class="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px]">2</span> Content</div>
-                        <i class="fas fa-chevron-right text-slate-300 text-[10px]"></i>
-                        <div class="flex items-center gap-2"><span class="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px]">3</span> Media & SEO</div>
-                    </div>
-
-                    <div class="flex items-center gap-3">
-                        <button type="button" wire:click="closeForm" class="px-5 py-2 rounded-full bg-red-600 hover:bg-red-700 text-white text-sm font-semibold transition flex items-center gap-2">
-                            <i class="fas fa-times"></i> Cancel
-                        </button>
-                        <button type="submit" class="px-5 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition flex items-center gap-2">
-                            <i class="fas fa-paper-plane"></i> Publish Post
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Form Content Area -->
-                <div class="flex-1 p-6 lg:p-8 max-w-4xl mx-auto w-full space-y-6">
-                    
-                    <!-- 1. Basic Information -->
-                    <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 lg:p-8">
-                        <div class="flex items-start gap-4 mb-8">
-                            <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold shrink-0">1</div>
+            <form wire:submit="save" class="flex flex-col min-h-screen">
+                <!-- Premium Header -->
+                <header class="sticky top-0 z-50 border-b border-slate-200/60 bg-white/80 backdrop-blur-md px-4 py-4 lg:px-10 shrink-0">
+                    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                        <div class="flex items-center gap-4">
+                            <button type="button" wire:click="closeForm" class="h-10 w-10 flex items-center justify-center rounded-xl bg-slate-50 text-slate-400 hover:text-indigo-600 transition-colors">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
                             <div>
-                                <h3 class="text-lg font-bold text-slate-800">Basic Information</h3>
-                                <p class="text-xs text-slate-500">Enter the title and category for your blog post</p>
+                                <h1 class="text-2xl font-black text-slate-900 tracking-tight lg:text-3xl">Editorial <span class="text-indigo-600">Composer</span></h1>
+                                <div class="flex items-center gap-2 mt-1 text-xs font-bold text-slate-500 uppercase tracking-widest">
+                                    <span>{{ $blog ? 'Refining Post' : 'Drafting New' }}</span>
+                                    <i class="fas fa-circle text-[4px] opacity-30"></i>
+                                    <span class="text-indigo-500">Publication Pipeline</span>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="space-y-6 pl-12">
-                            <div>
-                                <label class="block text-xs font-bold text-slate-700 mb-1">📝 Post Title <span class="text-red-500">*</span></label>
-                                <input type="text" wire:model="title" wire:keyup="generateSlug" placeholder="e.g., 'How to Build Amazing Web Apps' - Start typing your catchy title here..." class="w-full rounded-lg border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm py-2.5 px-4 text-slate-700 placeholder:text-slate-400">
-                                @error('title') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
-                            </div>
-
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                <div>
-                                    <label class="block text-xs font-bold text-slate-700 mb-1">📁 Category <span class="text-red-500">*</span></label>
-                                    <select wire:model="blog_category_id" class="w-full rounded-lg border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm py-2.5 px-3">
-                                        <option value="">-- Select Category --</option>
-                                        @foreach($categories as $cat)
-                                            <option value="{{ $cat->id }}">{{ $cat->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('blog_category_id') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-bold text-slate-700 mb-1">🔗 URL Slug <span class="text-slate-400 font-normal">(auto-generated)</span></label>
-                                    <input type="text" wire:model="slug" class="w-full rounded-lg border-slate-300 bg-slate-50 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm py-2.5 px-3 text-slate-500">
-                                    @error('slug') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-bold text-slate-700 mb-1">🏷️ Tags <span class="text-slate-400 font-normal">(optional)</span></label>
-                                    <input type="text" wire:model="tags" placeholder="Laravel, PHP, Tutorial" class="w-full rounded-lg border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm py-2.5 px-3">
-                                    <p class="text-[10px] text-slate-400 mt-1">Separate tags with commas</p>
-                                    @error('tags') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
-                                </div>
-                            </div>
-
-                            <div class="bg-[#ECFDF5] border border-[#A7F3D0] rounded-xl p-4 flex items-center justify-between">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center shrink-0">
-                                        <i class="fas fa-check"></i>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm font-bold text-emerald-900">Publish Immediately</p>
-                                        <p class="text-xs text-emerald-600">Make this post visible to public right away</p>
-                                    </div>
-                                </div>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" wire:model="is_published" class="sr-only peer">
-                                    <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 2. Write Your Content -->
-                    <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 lg:p-8">
-                        <div class="flex items-start gap-4 mb-6">
-                            <div class="w-8 h-8 rounded-full bg-purple-500 text-white flex items-center justify-center font-bold shrink-0">2</div>
-                            <div>
-                                <h3 class="text-lg font-bold text-slate-800">Write Your Content</h3>
-                                <p class="text-xs text-slate-500">Compose with powerful formatting tools</p>
-                            </div>
-                        </div>
-
-                        <div class="pl-12">
-                            <label class="block text-xs font-bold text-slate-700 mb-2">📝 Blog Content <span class="text-red-500">*</span></label>
-                            
-                            <div class="border border-slate-300 rounded-lg overflow-hidden">
-                                <!-- Mock Toolbar -->
-                                <div class="bg-slate-50 border-b border-slate-200 px-3 py-2 flex flex-wrap gap-2 items-center">
-                                    <button type="button" class="px-2 py-1 bg-white border border-slate-200 rounded text-xs hover:bg-slate-100 font-bold">B</button>
-                                    <button type="button" class="px-2 py-1 bg-white border border-slate-200 rounded text-xs hover:bg-slate-100 italic">I</button>
-                                    <button type="button" class="px-2 py-1 bg-white border border-slate-200 rounded text-xs hover:bg-slate-100 underline">U</button>
-                                    <div class="w-px h-4 bg-slate-300 mx-1"></div>
-                                    <button type="button" class="px-2 py-1 bg-white border border-slate-200 rounded text-xs hover:bg-slate-100 flex items-center gap-1"><i class="fas fa-list-ul"></i> List</button>
-                                    <button type="button" class="px-2 py-1 bg-white border border-slate-200 rounded text-xs hover:bg-slate-100 flex items-center gap-1"><i class="fas fa-list-ol"></i> 1. List</button>
-                                    <div class="w-px h-4 bg-slate-300 mx-1"></div>
-                                    <button type="button" class="px-2 py-1 bg-white border border-slate-200 rounded text-xs hover:bg-slate-100 font-bold">H2</button>
-                                    <button type="button" class="px-2 py-1 bg-white border border-slate-200 rounded text-xs hover:bg-slate-100 font-bold">H3</button>
-                                    <button type="button" class="px-2 py-1 bg-white border border-slate-200 rounded text-xs hover:bg-slate-100"><i class="fas fa-link"></i> Link</button>
-                                    <button type="button" class="px-2 py-1 bg-white border border-slate-200 rounded text-xs hover:bg-slate-100 ml-auto">Clear</button>
-                                </div>
-                                <textarea wire:model="content" rows="12" class="w-full border-0 focus:ring-0 sm:text-sm p-4 resize-y" placeholder="Write your amazing content here..."></textarea>
-                            </div>
-                            @error('content') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
-                        </div>
-                    </div>
-
-                    <!-- 3. Featured Image & SEO -->
-                    <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 lg:p-8">
-                        <div class="flex items-start gap-4 mb-6">
-                            <div class="w-8 h-8 rounded-full bg-orange-500 text-white flex items-center justify-center font-bold shrink-0">3</div>
-                            <div>
-                                <h3 class="text-lg font-bold text-slate-800">Featured Image & SEO</h3>
-                                <p class="text-xs text-slate-500">Add a cover image and optimize for search engines</p>
-                            </div>
-                        </div>
-
-                        <div class="space-y-8 pl-12">
-                            <!-- Image Upload -->
-                            <div>
-                                <label class="block text-xs font-bold text-slate-700 mb-2">📸 Featured Image <span class="text-slate-400 font-normal">(recommended 1200x630px)</span></label>
-                                
-                                <div class="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center hover:bg-slate-50 transition relative">
-                                    <input type="file" wire:model="image" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
-                                    
-                                    @if ($image)
-                                        <img src="{{ $image->temporaryUrl() }}" class="mx-auto h-32 object-contain mb-4 rounded">
-                                        <p class="text-sm font-semibold text-slate-700">Image selected: {{ $image->getClientOriginalName() }}</p>
-                                        <p class="text-xs text-blue-600 mt-1">Click or drag to change</p>
-                                    @elseif ($existingImage)
-                                        <img src="{{ Storage::url($existingImage) }}" class="mx-auto h-32 object-contain mb-4 rounded">
-                                        <p class="text-sm font-semibold text-slate-700">Current Featured Image</p>
-                                        <p class="text-xs text-blue-600 mt-1">Click or drag to replace</p>
-                                    @else
-                                        <div class="w-12 h-12 bg-blue-50 text-blue-500 rounded-xl flex items-center justify-center mx-auto mb-3 text-xl">
-                                            <i class="fas fa-folder-open"></i>
-                                        </div>
-                                        <p class="text-sm font-bold text-slate-800 mb-1">📸 Upload Featured Image</p>
-                                        <p class="text-xs text-slate-500">Drag & drop your image here, or <span class="text-blue-600 underline">click to browse</span></p>
-                                        <p class="text-[10px] text-slate-400 mt-1">Supports: PNG, JPG, WEBP (Max 4MB)</p>
-                                    @endif
-                                </div>
-                                @error('image') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
-                            </div>
-
-                            <!-- SEO Form -->
-                            <div class="pt-6 border-t border-slate-100">
-                                <div class="flex items-center justify-between mb-4">
-                                    <h4 class="text-sm font-bold text-slate-800 flex items-center gap-2"><i class="fas fa-search text-emerald-500"></i> SEO Optimization</h4>
-                                    <span class="text-[10px] text-slate-400 font-medium">(Optional but recommended)</span>
-                                </div>
-
-                                <div class="space-y-4">
-                                    <div>
-                                        <label class="block text-xs font-bold text-slate-700 mb-1">Meta Title</label>
-                                        <input type="text" wire:model="meta_title" placeholder="SEO-friendly title (50-60 characters recommended)" class="w-full rounded-lg border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm py-2.5 px-3">
-                                        <p class="text-[10px] text-slate-400 mt-1">This appears in Google search results.</p>
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-bold text-slate-700 mb-1">Meta Description</label>
-                                        <textarea wire:model="meta_description" rows="3" placeholder="Compelling description that appears in search results (150-160 characters)" class="w-full rounded-lg border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm py-2.5 px-3"></textarea>
-                                        <p class="text-[10px] text-slate-400 mt-1">Keep it under 160 characters for best results.</p>
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-bold text-slate-700 mb-1">Meta Keywords</label>
-                                        <input type="text" wire:model="meta_keywords" placeholder="keyword1, keyword2, keyword3" class="w-full rounded-lg border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm py-2.5 px-3">
-                                        <p class="text-[10px] text-slate-400 mt-1">Separate with commas (e.g., Laravel, PHP, Tutorial)</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                </div>
-
-                <!-- Sticky Bottom Bar -->
-                <div class="fixed bottom-0 left-0 lg:left-72 right-0 bg-[#0F172A] border-t border-slate-800 p-4 flex items-center justify-between z-40 shadow-[0_-10px_20px_-10px_rgba(0,0,0,0.3)]">
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center text-white text-lg">
-                            <i class="fas fa-save"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-sm font-bold text-white">Ready to Publish?</h4>
-                            <p class="text-xs text-slate-400">Your post will be saved securely</p>
-                        </div>
-                    </div>
-                    
-                    <div class="flex items-center gap-3">
-                        <button type="button" wire:click="closeForm" class="px-6 py-2.5 rounded-lg border border-slate-600 hover:bg-slate-800 text-white text-sm font-semibold transition">
-                            Cancel
-                        </button>
-                        <button type="submit" class="px-6 py-2.5 rounded-lg bg-[#22C55E] hover:bg-[#16a34a] text-white text-sm font-bold transition flex items-center gap-2">
-                            <i class="fas fa-check"></i> Publish Post
-                        </button>
-                    </div>
-                </div>
-
-            </form>
-        @else
-            <!-- List View Wrapper (Unchanged) -->
-            <div class="flex flex-col min-h-screen">
-                <header class="border-b border-slate-200 bg-white px-4 py-3 lg:px-8">
-                    <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                        <h1 class="text-3xl font-semibold text-slate-900 lg:text-[42px] lg:leading-none">Dashboard</h1>
                         <div class="flex items-center gap-3">
-                            <a href="{{ url('/') }}" target="_blank" class="rounded-xl bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-200 transition">🌍 View Frontend</a>
-                            <div class="relative">
-                                <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-xl text-slate-400">⌕</span>
-                                <input type="text" placeholder="Search..." class="w-72 rounded-2xl border border-slate-200 bg-slate-100 py-2.5 pl-11 pr-4 text-sm text-slate-700 outline-none transition focus:border-cyan-400 focus:bg-white focus:ring-2 focus:ring-cyan-100" />
-                            </div>
-                            <button type="button" class="rounded-full p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-700">🔔</button>
-                            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-sky-600 text-sm font-semibold text-white">AU</div>
+                            <button type="button" wire:click="closeForm" class="hidden sm:flex px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-500 hover:bg-slate-100 transition-all">
+                                Discard
+                            </button>
+                            <button type="submit" class="flex items-center gap-2 px-8 py-3 rounded-xl bg-indigo-600 text-[10px] font-black uppercase tracking-widest text-white shadow-xl shadow-indigo-100 hover:bg-indigo-700 transition-all">
+                                <i class="fas fa-paper-plane"></i> Commit & Publish
+                            </button>
                         </div>
                     </div>
                 </header>
 
-                <section class="p-4 lg:p-8 flex-1">
-                    <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                        <div>
-                            <h1 class="text-2xl font-bold text-slate-800">Blog Posts</h1>
-                            <p class="text-sm text-slate-500">Manage and organize your blog content</p>
+                <div class="flex-1 p-4 lg:p-10 pb-32">
+                    <div class="mx-auto max-w-5xl space-y-10">
+                        <!-- Primary Content Grid -->
+                        <div class="grid gap-10 lg:grid-cols-12">
+                            <!-- Left Column: Writing -->
+                            <div class="lg:col-span-8 space-y-10">
+                                <div class="rounded-[2.5rem] border border-slate-200 bg-white p-8 lg:p-12 shadow-2xl shadow-slate-200/50">
+                                    <div class="space-y-8">
+                                        <div class="space-y-4">
+                                            <label class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Article Headline</label>
+                                            <input type="text" wire:model="title" wire:keyup="generateSlug" placeholder="The art of minimalistic engineering..."
+                                                class="w-full border-none p-0 text-3xl lg:text-4xl font-black text-slate-900 placeholder:text-slate-200 focus:ring-0 outline-none" />
+                                            @error('title') <p class="text-[10px] font-bold text-rose-500">{{ $message }}</p> @enderror
+                                        </div>
+
+                                        <div class="h-px bg-slate-100"></div>
+
+                                        <div class="space-y-4">
+                                            <label class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">The Narrative</label>
+                                            <div class="relative">
+                                                <div class="sticky top-28 z-10 flex items-center gap-1 p-1 bg-slate-900 rounded-xl mb-4 shadow-xl">
+                                                    <button type="button" class="h-8 w-8 rounded-lg text-white hover:bg-slate-800 transition-colors"><i class="fas fa-bold"></i></button>
+                                                    <button type="button" class="h-8 w-8 rounded-lg text-white hover:bg-slate-800 transition-colors"><i class="fas fa-italic"></i></button>
+                                                    <button type="button" class="h-8 w-8 rounded-lg text-white hover:bg-slate-800 transition-colors"><i class="fas fa-link"></i></button>
+                                                    <div class="w-px h-4 bg-slate-800 mx-1"></div>
+                                                    <button type="button" class="h-8 w-8 rounded-lg text-white hover:bg-slate-800 transition-colors"><i class="fas fa-heading"></i></button>
+                                                    <button type="button" class="h-8 w-8 rounded-lg text-white hover:bg-slate-800 transition-colors"><i class="fas fa-quote-right"></i></button>
+                                                </div>
+                                                <textarea wire:model="content" rows="20" placeholder="Begin your story here..."
+                                                    class="w-full border-none p-0 text-base font-medium text-slate-600 leading-relaxed placeholder:text-slate-200 focus:ring-0 outline-none resize-none"></textarea>
+                                            </div>
+                                            @error('content') <p class="text-[10px] font-bold text-rose-500">{{ $message }}</p> @enderror
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- SEO & Meta -->
+                                <div class="rounded-[2.5rem] border border-slate-200 bg-white p-8 lg:p-12 shadow-2xl shadow-slate-200/50 space-y-8">
+                                    <div class="flex items-center gap-3">
+                                        <div class="h-1 w-12 bg-indigo-600 rounded-full"></div>
+                                        <h3 class="text-xs font-black uppercase tracking-[0.3em] text-slate-400">Search Intelligence</h3>
+                                    </div>
+                                    
+                                    <div class="grid gap-6">
+                                        <div class="space-y-2">
+                                            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400">Meta Title Signature</label>
+                                            <input type="text" wire:model="meta_title" class="w-full rounded-2xl border-slate-200 bg-slate-50 px-5 py-4 text-sm font-bold text-slate-700 outline-none transition focus:bg-white focus:ring-4 focus:ring-indigo-100" />
+                                        </div>
+                                        <div class="space-y-2">
+                                            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400">Meta Narrative</label>
+                                            <textarea wire:model="meta_description" rows="3" class="w-full rounded-2xl border-slate-200 bg-slate-50 px-5 py-4 text-sm font-medium text-slate-600 outline-none transition focus:bg-white focus:ring-4 focus:ring-indigo-100"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Column: Metadata & Assets -->
+                            <div class="lg:col-span-4 space-y-10">
+                                <!-- Featured Media -->
+                                <div class="rounded-[2.5rem] border border-slate-200 bg-white p-8 shadow-2xl shadow-slate-200/50 space-y-6">
+                                    <h3 class="text-xs font-black uppercase tracking-[0.3em] text-slate-400">Hero Asset</h3>
+                                    <div class="relative group aspect-[4/3] rounded-3xl bg-slate-50 border-2 border-dashed border-slate-200 flex flex-col items-center justify-center overflow-hidden transition-all hover:border-indigo-400">
+                                        @if ($image)
+                                            <img src="{{ $image->temporaryUrl() }}" class="h-full w-full object-cover" />
+                                        @elseif ($existingImage)
+                                            <img src="{{ Storage::url($existingImage) }}" class="h-full w-full object-cover" />
+                                        @else
+                                            <i class="fas fa-image text-slate-200 text-4xl mb-2"></i>
+                                            <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Select Visual</span>
+                                        @endif
+                                        <input type="file" wire:model="image" class="absolute inset-0 opacity-0 cursor-pointer" />
+                                    </div>
+                                    @error('image') <p class="text-[10px] font-bold text-rose-500">{{ $message }}</p> @enderror
+                                </div>
+
+                                <!-- Configuration -->
+                                <div class="rounded-[2.5rem] border border-slate-200 bg-white p-8 shadow-2xl shadow-slate-200/50 space-y-8">
+                                    <h3 class="text-xs font-black uppercase tracking-[0.3em] text-slate-400">Structural Metadata</h3>
+                                    
+                                    <div class="space-y-6">
+                                        <div class="space-y-2">
+                                            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400">Taxonomy Node</label>
+                                            <select wire:model="blog_category_id" class="w-full rounded-2xl border-slate-200 bg-slate-50 px-5 py-4 text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-100 appearance-none">
+                                                <option value="">-- Uncategorized --</option>
+                                                @foreach($categories as $cat)
+                                                    <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                        <div class="space-y-2">
+                                            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400">URL Signature</label>
+                                            <input type="text" wire:model="slug" readonly class="w-full rounded-2xl border-slate-200 bg-slate-100 px-5 py-4 text-xs font-bold text-slate-400 outline-none cursor-not-allowed" />
+                                        </div>
+
+                                        <div class="flex items-center justify-between p-4 rounded-2xl bg-slate-50">
+                                            <div class="flex flex-col">
+                                                <span class="text-[10px] font-black uppercase tracking-widest text-slate-900">Visibility Status</span>
+                                                <span class="text-[9px] font-bold text-slate-400">{{ $is_published ? 'Live on Network' : 'Private Draft' }}</span>
+                                            </div>
+                                            <button type="button" wire:click="$toggle('is_published')" class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none {{ $is_published ? 'bg-indigo-600' : 'bg-slate-200' }}">
+                                                <span class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out {{ $is_published ? 'translate-x-5' : 'translate-x-0' }}"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <button wire:click="openCreateForm" class="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 shadow-sm">
-                            <i class="fas fa-plus mr-2"></i> Create Blog Post
-                        </button>
+                    </div>
+                </div>
+            </form>
+        @else
+            <!-- Premium Header -->
+            <header class="sticky top-0 z-40 border-b border-slate-200/60 bg-white/80 backdrop-blur-md px-4 py-4 lg:px-10 shrink-0">
+                <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                    <div>
+                        <h1 class="text-2xl font-black text-slate-900 tracking-tight lg:text-3xl">Editorial <span class="text-indigo-600">Archives</span></h1>
+                        <div class="flex items-center gap-2 mt-1 text-xs font-bold text-slate-500 uppercase tracking-widest">
+                            <span>Admin</span>
+                            <i class="fas fa-chevron-right text-[8px]"></i>
+                            <span class="text-indigo-500">Content Stream</span>
+                        </div>
                     </div>
 
-                    @if (session()->has('success'))
-                        <div class="mb-4 rounded-lg bg-emerald-50 p-4 border border-emerald-200">
-                            <p class="text-sm font-medium text-emerald-800">{{ session('success') }}</p>
-                        </div>
-                    @endif
+                    <div class="flex items-center gap-4">
+                        <button wire:click="openCreateForm" class="flex items-center gap-2 rounded-xl bg-indigo-600 px-8 py-3 text-[10px] font-black uppercase tracking-widest text-white shadow-xl shadow-indigo-100 hover:bg-indigo-700 transition-all">
+                            <i class="fas fa-plus"></i> Draft New Story
+                        </button>
+                    </div>
+                </div>
+            </header>
 
-                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                        <div class="p-4 border-b border-slate-100 flex flex-wrap items-center gap-4">
-                            <div class="relative flex-1 min-w-[200px]">
-                                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"><i class="fas fa-search"></i></span>
-                                <input type="text" wire:model.live.debounce.300ms="search" placeholder="Search posts..." class="block w-full rounded-lg border-slate-200 pl-10 focus:border-blue-500 focus:ring-blue-500 sm:text-sm py-2">
-                            </div>
-                            <select wire:model.live="categoryId" class="rounded-lg border-slate-200 text-sm focus:border-blue-500 py-2 min-w-[150px]">
-                                <option value="">All Categories</option>
+            <section class="p-4 lg:p-10">
+                <div class="mx-auto max-w-7xl space-y-10">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                        <div class="relative w-full sm:w-96">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+                                <i class="fas fa-search text-xs"></i>
+                            </span>
+                            <input type="text" wire:model.live.debounce.300ms="search" placeholder="Filter articles by title or keywords..."
+                                class="w-full rounded-2xl border-none bg-white pl-12 pr-4 py-4 text-[10px] font-black uppercase tracking-widest text-slate-500 outline-none focus:ring-4 focus:ring-indigo-100 transition shadow-sm" />
+                        </div>
+
+                        <div class="flex items-center gap-3">
+                            <select wire:model.live="categoryId" class="rounded-xl border-none bg-white px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-500 outline-none focus:ring-4 focus:ring-indigo-100 shadow-sm">
+                                <option value="">Global Library</option>
                                 @foreach($categories as $cat)
                                     <option value="{{ $cat->id }}">{{ $cat->name }}</option>
                                 @endforeach
                             </select>
-                            <select wire:model.live="status" class="rounded-lg border-slate-200 text-sm focus:border-blue-500 py-2 min-w-[150px]">
-                                <option value="">All Status</option>
-                                <option value="published">Published</option>
-                                <option value="draft">Draft</option>
-                            </select>
-                            <div class="flex items-center gap-2">
-                                <span class="text-sm text-slate-500">Per page:</span>
-                                <select class="rounded-lg border-slate-200 text-sm focus:border-blue-500 py-2">
-                                    <option>10</option><option>25</option><option>50</option>
-                                </select>
-                            </div>
                         </div>
-
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-slate-100">
-                                <thead class="bg-slate-50/50">
-                                    <tr>
-                                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider w-16">#</th>
-                                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Title</th>
-                                        <th class="px-6 py-4 text-center text-xs font-bold text-slate-500 uppercase tracking-wider">Category</th>
-                                        <th class="px-6 py-4 text-center text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th>
-                                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Date</th>
-                                        <th class="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase tracking-wider">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-slate-100">
-                                    @forelse ($blogs as $index => $item)
-                                        <tr class="hover:bg-slate-50/50 transition-colors">
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 font-medium">{{ $blogs->firstItem() + $index }}</td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                <div class="flex items-center gap-3">
-                                                    @if($item->image)
-                                                        <img src="{{ Storage::url($item->image) }}" class="h-10 w-10 rounded object-cover border border-slate-200">
-                                                    @else
-                                                        <div class="h-10 w-10 rounded bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400">
-                                                            <i class="fas fa-image"></i>
-                                                        </div>
-                                                    @endif
-                                                    <span class="text-sm font-medium text-slate-700">{{ $item->title }}</span>
-                                                </div>
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-center">
-                                                @if($item->category)
-                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700">{{ $item->category->name }}</span>
-                                                @else
-                                                    <span class="text-xs text-slate-400">-</span>
-                                                @endif
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-center">
-                                                @if($item->is_published)
-                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700"><i class="fas fa-check-circle mr-1 text-emerald-500"></i> Published</span>
-                                                @else
-                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600"><i class="fas fa-clock mr-1"></i> Draft</span>
-                                                @endif
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{{ $item->created_at->format('M d, Y') }}</td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                <div class="flex justify-end gap-2">
-                                                    <button class="inline-flex items-center justify-center rounded-full bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-indigo-700 shadow-sm"><i class="fas fa-eye mr-1.5"></i> View</button>
-                                                    <button wire:click="edit({{ $item->id }})" class="inline-flex items-center justify-center rounded-full bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-blue-700 shadow-sm"><i class="fas fa-edit mr-1.5"></i> Edit</button>
-                                                    <button wire:click="delete({{ $item->id }})" wire:confirm="Are you sure?" class="inline-flex items-center justify-center rounded-full bg-red-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-red-700 shadow-sm"><i class="fas fa-trash-alt mr-1.5"></i> Delete</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr><td colspan="6" class="px-6 py-12 text-center text-sm text-slate-500">No blog posts found. Create your first post!</td></tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
-                        @if($blogs->hasPages())
-                            <div class="p-4 border-t border-slate-100 flex justify-between items-center text-sm text-slate-500">
-                                <div>Showing {{ $blogs->firstItem() }}-{{ $blogs->lastItem() }} of {{ $blogs->total() }} items</div>
-                                <div>{{ $blogs->links('pagination::tailwind') }}</div>
-                            </div>
-                        @endif
                     </div>
-                </section>
-            </div>
+
+                    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                        @forelse ($blogs as $item)
+                            <div class="group relative rounded-[2.5rem] border border-slate-200 bg-white overflow-hidden shadow-2xl shadow-slate-200/50 transition-all hover:-translate-y-2 hover:shadow-indigo-100/50">
+                                <!-- Post Preview Media -->
+                                <div class="aspect-[16/10] bg-slate-100 relative overflow-hidden">
+                                    @if($item->image)
+                                        <img src="{{ Storage::url($item->image) }}" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                                    @else
+                                        <div class="h-full w-full flex items-center justify-center text-slate-200">
+                                            <i class="fas fa-image text-5xl"></i>
+                                        </div>
+                                    @endif
+                                    
+                                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                                        <div class="flex gap-2">
+                                            <button wire:click="edit({{ $item->id }})" class="h-10 w-10 flex items-center justify-center rounded-xl bg-white/20 backdrop-blur-md text-white hover:bg-indigo-600 transition-all">
+                                                <i class="fas fa-edit text-xs"></i>
+                                            </button>
+                                            <button wire:click="delete({{ $item->id }})" wire:confirm="Relinquish this story?" class="h-10 w-10 flex items-center justify-center rounded-xl bg-white/20 backdrop-blur-md text-white hover:bg-rose-600 transition-all">
+                                                <i class="fas fa-trash-alt text-xs"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="absolute top-4 left-4">
+                                        @if($item->is_published)
+                                            <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest bg-emerald-500 text-white shadow-lg">Live</span>
+                                        @else
+                                            <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest bg-slate-900 text-white shadow-lg">Draft</span>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <!-- Post Content -->
+                                <div class="p-8">
+                                    <div class="flex items-center gap-2 mb-4">
+                                        @if($item->category)
+                                            <span class="text-[10px] font-black uppercase tracking-widest text-indigo-600 bg-indigo-50 px-3 py-1 rounded-lg">{{ $item->category->name }}</span>
+                                        @endif
+                                        <span class="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">{{ $item->created_at->format('M d, Y') }}</span>
+                                    </div>
+                                    <h3 class="text-xl font-black text-slate-900 tracking-tight leading-snug line-clamp-2 group-hover:text-indigo-600 transition-colors">{{ $item->title }}</h3>
+                                    
+                                    <div class="mt-8 pt-6 border-t border-slate-50 flex items-center justify-between">
+                                        <div class="flex -space-x-2">
+                                            <div class="h-8 w-8 rounded-full bg-slate-100 border-2 border-white flex items-center justify-center text-[10px] font-black text-slate-400">AU</div>
+                                        </div>
+                                        <button wire:click="edit({{ $item->id }})" class="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-indigo-600 transition-colors">Refine Post <i class="fas fa-arrow-right ml-1"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        @empty
+                            <div class="col-span-full py-32 text-center">
+                                <div class="h-24 w-24 rounded-[2.5rem] bg-slate-50 flex items-center justify-center text-slate-200 text-4xl mx-auto mb-6">
+                                    <i class="fas fa-pen-nib"></i>
+                                </div>
+                                <h3 class="text-xl font-black text-slate-900 tracking-tight">The Library is Empty</h3>
+                                <p class="text-slate-500 mt-2">Begin your publishing journey by drafting a new story.</p>
+                            </div>
+                        @forelse
+                    </div>
+
+                    @if($blogs->hasPages())
+                        <div class="mt-12 flex justify-center">
+                            {{ $blogs->links() }}
+                        </div>
+                    @endif
+                </div>
+            </section>
         @endif
+
+        <footer class="py-10 text-center">
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.9em]">Media Engineering • Narrative Core</p>
+        </footer>
     </main>
 </div>

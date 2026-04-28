@@ -83,6 +83,14 @@
                         <i class="fa-solid fa-arrow-right ml-2 text-xs" wire:loading.remove wire:target="login"></i>
                     </button>
                 </div>
+                
+                <!-- Sign Up Link -->
+                <div class="text-center mt-6">
+                    <p class="text-sm text-slate-500">
+                        Don't have an account? 
+                        <a href="{{ route('register') }}" class="text-blue-600 font-bold hover:text-blue-700 transition-colors">Create one here</a>
+                    </p>
+                </div>
             </form>
         </div>
     </div>

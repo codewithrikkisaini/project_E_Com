@@ -1,142 +1,143 @@
-<div class="admin-shell min-h-screen bg-slate-100 lg:flex">
-    <aside class="w-full border-r border-slate-200 bg-white lg:sticky lg:top-0 lg:h-screen lg:w-72">
-        <div class="border-b border-slate-100 px-6 py-5">
-            <h2 class="text-xl font-bold text-slate-800">NM</h2>
-            <h1 class="text-sm font-medium text-slate-600">Dashboard</h1>
-            <p class="text-xs text-gray-400">Nick's & Morris</p>
-        </div>
-
-        @php
-            $active = fn($path) => request()->is($path) ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-100';
-        @endphp
-
-        <nav class="flex-1 space-y-2 overflow-y-auto px-4 py-6">
-            <a href="{{ url('/admin/dashboard') }}" class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/dashboard*') }}">
-                <span>🏠</span>
-                <span class="font-semibold">Dashboard</span>
-            </a>
-            <a href="{{ url('/admin/products') }}" class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/products*') }}">
-                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M4 6a2 2 0 012-2h12a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V6z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5v4M15 5v4" />
-                </svg>
-                <span>Products</span>
-            </a>
-            <a href="{{ url('/admin/banner') }}" class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/banner*') }}"><span>🖼</span><span>Banner</span></a>
-            <a href="{{ url('/admin/services') }}" class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/services*') }}"><span>🧰</span><span>Services</span></a>
-            <a href="{{ url('/admin/about') }}" class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/about*') }}"><span>ℹ</span><span>About</span></a>
-            <a href="{{ url('/admin/testimonials') }}" class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/testimonials*') }}"><span>💬</span><span>Testimonials</span></a>
-            <a href="{{ url('/admin/orders') }}" class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/orders*') }}"><span>📑</span><span>Orders</span></a>
-            <a href="{{ url('/admin/users') }}" class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/users*') }}"><span>👤</span><span>Users</span></a>
-            <a href="{{ url('/admin/payment-settings') }}" class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/payment-settings*') }}"><span>💳</span><span>QR Payment</span></a>
-            <a href="{{ url('/admin/settings') }}" class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/settings*') }}"><span>⚙</span><span>Settings</span></a>
-            <a href="{{ url('/admin/blogs') }}" class="flex items-center gap-3 px-4 py-3 transition {{ $active('admin/blogs*') }}"><span>📝</span><span>Blogs</span></a>
-            <a href="{{ url('/admin/enquiries?type=general') }}"
-                class="flex items-center gap-3 px-4 py-3 transition {{ request()->fullUrlIs('*type=general*') ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-100' }}">
-                <span>📩</span>
-                <span>General Enquiry</span>
-            </a>
-            <a href="{{ url('/admin/enquiries?type=product') }}"
-                class="flex items-center gap-3 px-4 py-3 transition {{ request()->fullUrlIs('*type=product*') ? 'bg-gray-100 text-gray-900' : 'text-gray-700 hover:bg-gray-100' }}">
-                <span>📦</span>
-                <span>Product Enquiry</span>
-            </a>
-            <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-700 transition hover:bg-red-50 hover:text-red-600">
-                <span>🚪</span><span>Logout</span>
-            </a>
-        </nav>
-    </aside>
+<div class="admin-shell min-h-screen bg-slate-50 lg:flex">
+    <x-admin.sidebar />
 
     <main class="flex-1">
-        <header class="border-b border-slate-200 bg-white px-4 py-3 lg:px-8">
-            <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                <h1 class="text-3xl font-semibold text-slate-900 lg:text-[42px] lg:leading-none">Users</h1>
-                <div class="flex items-center gap-3">
-                    <div class="relative">
-                        <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-xl text-slate-400">⌕</span>
-                        <input type="text" placeholder="Search..."
-                            class="w-72 rounded-2xl border border-slate-200 bg-slate-100 py-2.5 pl-11 pr-4 text-sm text-slate-700 outline-none transition focus:border-cyan-400 focus:bg-white focus:ring-2 focus:ring-cyan-100" />
+        <!-- Premium Header -->
+        <header class="sticky top-0 z-40 border-b border-slate-200/60 bg-white/80 backdrop-blur-md px-4 py-4 lg:px-10 shrink-0">
+            <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                <div>
+                    <h1 class="text-2xl font-black text-slate-900 tracking-tight lg:text-3xl">Community <span class="text-indigo-600">Hub</span></h1>
+                    <div class="flex items-center gap-2 mt-1 text-xs font-bold text-slate-500 uppercase tracking-widest">
+                        <span>Admin</span>
+                        <i class="fas fa-chevron-right text-[8px]"></i>
+                        <span class="text-indigo-500">Customer Base</span>
                     </div>
-                    <button type="button" class="rounded-full p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-700">🔔</button>
-                    <div class="flex h-10 w-10 items-center justify-center rounded-full bg-sky-600 text-sm font-semibold text-white">AU</div>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 border border-slate-200">
+                        <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Total: {{ $totalUsers }} Members</span>
+                    </div>
+                    <div class="flex items-center gap-2 border-l border-slate-200 pl-4">
+                        <button type="button" class="relative rounded-xl p-2.5 text-slate-500 transition hover:bg-slate-100 hover:text-indigo-600">
+                            <i class="fas fa-user-plus text-lg"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </header>
 
-        <section class="space-y-6 p-4 lg:p-8">
-            <div class="mx-auto max-w-7xl space-y-6">
-                <div class="flex items-start justify-between gap-3">
+        <section class="p-4 lg:p-10">
+            <div class="mx-auto max-w-7xl space-y-10">
+                <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
                     <div>
-                        <h2 class="text-2xl font-bold text-slate-900">Users</h2>
-                        <p class="text-sm text-slate-500">Only customer users are listed here.</p>
+                        <h2 class="text-3xl font-black text-slate-900 tracking-tight">Active <span class="text-indigo-600">Customers</span></h2>
+                        <p class="mt-2 text-slate-500 font-medium">Manage your growing community and monitor user acquisition.</p>
                     </div>
-                    <p class="text-sm text-slate-600">Total Users: {{ $totalUsers }}</p>
                 </div>
 
                 @if (session('success'))
-                    <div class="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                    <div class="rounded-2xl border border-emerald-100 bg-emerald-50/50 p-4 flex items-center gap-3 text-sm font-bold text-emerald-700">
+                        <div class="h-8 w-8 rounded-lg bg-emerald-500 flex items-center justify-center text-white">
+                            <i class="fas fa-check"></i>
+                        </div>
                         {{ session('success') }}
                     </div>
                 @endif
 
-                @if (session('error'))
-                    <div class="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
-                        {{ session('error') }}
+                <!-- Search Area -->
+                <div class="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-xl shadow-slate-200/40">
+                    <div class="relative">
+                        <span class="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400">
+                            <i class="fas fa-search text-lg"></i>
+                        </span>
+                        <input type="text" wire:model.live.debounce.300ms="search" placeholder="Locate user by name, email address, or mobile number..."
+                            class="w-full rounded-[1.5rem] border-none bg-slate-50 pl-14 pr-6 py-5 text-base font-bold text-slate-700 focus:bg-white focus:ring-4 focus:ring-indigo-100 outline-none transition shadow-inner" />
                     </div>
-                @endif
-
-                <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                    <input type="text" wire:model.live.debounce.300ms="search" placeholder="Search by name/email/phone"
-                        class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm outline-none focus:border-blue-400 focus:bg-white" />
                 </div>
 
-                <div class="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
-                    <table class="min-w-full divide-y divide-slate-200 text-sm">
-                        <thead class="bg-slate-50">
-                            <tr>
-                                <th class="px-5 py-4 text-left font-semibold text-slate-700">S.No.</th>
-                                <th class="px-5 py-4 text-left font-semibold text-slate-700">User</th>
-                                <th class="px-5 py-4 text-left font-semibold text-slate-700">Contact</th>
-                                <th class="px-5 py-4 text-left font-semibold text-slate-700">Orders</th>
-                                <th class="px-5 py-4 text-left font-semibold text-slate-700">Joined</th>
-                                <th class="px-5 py-4 text-left font-semibold text-slate-700">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-100">
-                            @forelse($users as $index => $user)
+                <!-- Users Table -->
+                <div class="rounded-[2.5rem] border border-slate-200 bg-white p-6 lg:p-10 shadow-2xl shadow-slate-200/50">
+                    <div class="overflow-hidden rounded-3xl border border-slate-100 shadow-sm">
+                        <table class="min-w-full divide-y divide-slate-100 text-sm">
+                            <thead class="bg-slate-50/80 backdrop-blur-sm">
                                 <tr>
-                                    <td class="px-5 py-4 text-slate-700">{{ ($users->firstItem() ?? 0) + $index }}</td>
-                                    <td class="px-5 py-4">
-                                        <p class="font-medium text-slate-900">{{ $user->name }}</p>
-                                    </td>
-                                    <td class="px-5 py-4">
-                                        <p class="text-slate-700">{{ $user->email }}</p>
-                                        <p class="text-xs text-slate-500">{{ $user->phone ?: '-' }}</p>
-                                    </td>
-                                    <td class="px-5 py-4 text-slate-700">{{ $user->orders_count }}</td>
-                                    <td class="px-5 py-4 text-slate-700">{{ $user->created_at?->format('d M Y') }}</td>
-                                    <td class="px-5 py-4">
-                                        <button type="button" wire:click="deleteUser({{ $user->id }})"
-                                            wire:confirm="Are you sure you want to delete this user?"
-                                            class="rounded-lg border border-rose-200 px-3 py-1.5 text-xs font-semibold text-rose-700 hover:bg-rose-50">
-                                            Delete
-                                        </button>
-                                    </td>
+                                    <th class="px-6 py-5 text-left text-[11px] font-black uppercase tracking-widest text-slate-500">Rank</th>
+                                    <th class="px-6 py-5 text-left text-[11px] font-black uppercase tracking-widest text-slate-500">Member Profile</th>
+                                    <th class="px-6 py-5 text-left text-[11px] font-black uppercase tracking-widest text-slate-500">Engagement</th>
+                                    <th class="px-6 py-5 text-left text-[11px] font-black uppercase tracking-widest text-slate-500">Membership</th>
+                                    <th class="px-6 py-5 text-right text-[11px] font-black uppercase tracking-widest text-slate-500">Control</th>
                                 </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="6" class="px-5 py-10 text-center text-slate-500">No users found.</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody class="divide-y divide-slate-50">
+                                @forelse($users as $index => $user)
+                                    <tr class="group hover:bg-slate-50/50 transition-all">
+                                        <td class="px-6 py-6">
+                                            <span class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 text-[10px] font-black text-slate-400 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                                                {{ ($users->firstItem() ?? 0) + $index }}
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-6">
+                                            <div class="flex items-center gap-4">
+                                                <div class="h-12 w-12 rounded-2xl bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center text-slate-400 text-sm font-black group-hover:from-indigo-500 group-hover:to-violet-600 group-hover:text-white transition-all duration-500 shadow-sm">
+                                                    {{ substr($user->name, 0, 1) }}
+                                                </div>
+                                                <div class="flex flex-col">
+                                                    <span class="font-black text-slate-900 tracking-tight text-base">{{ $user->name }}</span>
+                                                    <span class="text-[10px] font-bold text-slate-400 mt-0.5 tracking-tight">{{ $user->email }}</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-6">
+                                            <div class="flex flex-col">
+                                                <div class="flex items-center gap-2">
+                                                    <span class="text-sm font-black text-slate-800">{{ $user->orders_count }}</span>
+                                                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Invoices</span>
+                                                </div>
+                                                <div class="mt-1.5 h-1 w-24 rounded-full bg-slate-100 overflow-hidden">
+                                                    <div class="h-full bg-indigo-500" style="width: {{ min($user->orders_count * 10, 100) }}%"></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-6">
+                                            <div class="flex flex-col">
+                                                <span class="text-xs font-bold text-slate-500">{{ $user->created_at?->format('d M, Y') }}</span>
+                                                <span class="text-[9px] font-black text-emerald-500 uppercase tracking-tighter mt-1 italic">Verified Account</span>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-6 text-right">
+                                            <button type="button" wire:click="deleteUser({{ $user->id }})"
+                                                wire:confirm="Relinquish this member from the database?"
+                                                class="h-10 w-10 flex items-center justify-center rounded-xl bg-white border border-slate-200 text-slate-400 hover:text-rose-600 hover:border-rose-200 hover:rotate-12 transition-all shadow-sm">
+                                                <i class="fas fa-user-minus text-xs"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="px-6 py-24 text-center">
+                                            <div class="flex flex-col items-center gap-4">
+                                                <div class="h-20 w-20 rounded-[2.5rem] bg-slate-50 flex items-center justify-center text-slate-100 text-5xl">
+                                                    <i class="fas fa-users"></i>
+                                                </div>
+                                                <p class="text-slate-300 font-black uppercase tracking-[0.4em] text-[10px]">Zero Members Found</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
 
-                    <div class="border-t border-slate-200 px-5 py-4">
+                    <div class="mt-10">
                         {{ $users->links() }}
                     </div>
                 </div>
             </div>
         </section>
+
+        <footer class="py-10 text-center">
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.5em]">Nick's & Morris Social Core • Active Registry</p>
+        </footer>
     </main>
 </div>

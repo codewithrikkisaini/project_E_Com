@@ -170,8 +170,8 @@
                     <div class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-slate-900 rounded-full"></div>
                 </div>
                 <div class="flex-1 min-w-0">
-                    <p class="text-[13px] font-black text-white truncate tracking-tight">Admin User</p>
-                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Super Admin</p>
+                    <p class="text-[13px] font-black text-white truncate tracking-tight">{{ Auth::user()->name ?? 'Admin User' }}</p>
+                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Administrator</p>
                 </div>
             </div>
             
@@ -179,9 +179,12 @@
                 <a href="#" class="flex items-center justify-center gap-2 py-2 rounded-lg bg-slate-800/50 text-slate-400 hover:text-white hover:bg-slate-700/50 transition-all text-[11px] font-bold">
                     <i class="fas fa-user-cog"></i> Profile
                 </a>
-                <a href="#" class="flex items-center justify-center gap-2 py-2 rounded-lg bg-rose-500/5 text-rose-500 hover:bg-rose-500 hover:text-white transition-all text-[11px] font-bold border border-rose-500/10">
-                    <i class="fas fa-power-off"></i> Exit
-                </a>
+                <form method="POST" action="{{ route('logout') }}" class="w-full">
+                    @csrf
+                    <button type="submit" class="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-rose-500/5 text-rose-500 hover:bg-rose-500 hover:text-white transition-all text-[11px] font-bold border border-rose-500/10">
+                        <i class="fas fa-power-off"></i> Exit
+                    </button>
+                </form>
             </div>
         </div>
     </div>

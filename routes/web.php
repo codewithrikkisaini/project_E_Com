@@ -13,10 +13,26 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
+Route::get('/fix-sidebars', function() {
+    $files = glob(resource_path('views/livewire/admin/*/*/*.blade.php'));
+    $files = array_merge($files, glob(resource_path('views/livewire/admin/*.blade.php')));
+    $files = array_merge($files, glob(resource_path('views/livewire/admin/*/*.blade.php')));
+    $count = 0;
+    foreach ($files as $file) {
+        $content = file_get_contents($file);
+        $newContent = preg_replace('/<aside class="w-full border-r border-slate-200 bg-white lg:sticky lg:top-0 lg:h-screen lg:w-72">.*?<\/aside>/s', '<x-admin.sidebar />', $content);
+        if ($newContent && $newContent !== $content) {
+            file_put_contents($file, $newContent);
+            $count++;
+        }
+    }
+    return "Fixed $count files";
+});
+
 // Essential routes for navigation components
 Route::get('/products', \App\Livewire\Frontend\Product\Index::class)->name('products');
 Route::get('/product/{slug}', \App\Livewire\Frontend\Product\Detail::class)->name('product.detail');
-Route::get('/checkout', \App\Livewire\Frontend\Checkout\Index::class)->name('checkout');
+Route::get('/checkout', \App\Livewire\Frontend\Checkout\Index::class)->name('checkout')->middleware('auth');
 
 Route::get('/about', function () {
     return view('frontend.about');
@@ -34,25 +50,20 @@ Route::post('/logout', function (\Illuminate\Http\Request $request) {
     return redirect('/');
 })->name('logout');
 
-Route::get('/register', function () {
-    return view('welcome'); // Currently redirects to welcome, adjust if register view exists
-})->name('register');
+Route::get('/register', \App\Livewire\Frontend\Auth\Register::class)->name('register');
 
 // Admin Routes
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
 
-    Route::get('/products', ProductForm::class)->name('products');
-    Route::redirect('/product/create', '/admin/products')->name('product.create');
-    Route::get('/product/{product}/edit', ProductForm::class)->name('product.edit');
-
     Route::get('/banner', \App\Livewire\Admin\Banner\Form\Form::class)->name('banner');
-    Route::get('/services', Dashboard::class)->name('services');
+
     Route::get('/about', Dashboard::class)->name('about');
     Route::get('/testimonials', TestimonialForm::class)->name('testimonials');
     Route::get('/orders', OrderIndex::class)->name('orders');
     Route::get('/users', UserIndex::class)->name('users');
     Route::get('/payment-settings', PaymentSettingsForm::class)->name('payment-settings');
+    Route::get('/products', ProductForm::class)->name('products');
     Route::get('/settings', \App\Livewire\Admin\Settings\Form\Form::class)->name('settings');
     Route::get('/blog-categories', \App\Livewire\Admin\BlogCategory\Form\Form::class)->name('blog-categories');
     Route::get('/blogs', \App\Livewire\Admin\Blog\Form\Form::class)->name('blogs');
