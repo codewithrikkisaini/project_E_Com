@@ -244,7 +244,7 @@
                                 <h3 class="text-xl font-black text-slate-900 tracking-tight">The Library is Empty</h3>
                                 <p class="text-slate-500 mt-2">Begin your publishing journey by drafting a new story.</p>
                             </div>
-                        @forelse
+                        @endforelse
                     </div>
 
                     @if($blogs->hasPages())
