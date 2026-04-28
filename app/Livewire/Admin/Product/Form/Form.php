@@ -122,12 +122,17 @@ class Form extends Component
 
         $validated['price'] = (float) $validated['price'];
 
-        if ($this->product) {
-            $this->product->update($validated);
-            session()->flash('success', 'Product updated successfully.');
-        } else {
-            Product::create($validated);
-            session()->flash('success', 'Product created successfully.');
+        try {
+            if ($this->product) {
+                $this->product->update($validated);
+                session()->flash('success', 'Product updated successfully.');
+            } else {
+                Product::create($validated);
+                session()->flash('success', 'Product created successfully.');
+            }
+        } catch (\Exception $e) {
+            session()->flash('error', 'Error: ' . $e->getMessage());
+            return;
         }
 
         $this->createNew();
@@ -135,19 +140,23 @@ class Form extends Component
 
     public function delete(int $id): void
     {
-        $product = Product::findOrFail($id);
+        try {
+            $product = Product::findOrFail($id);
 
-        if ($product->image) {
-            \Storage::disk('public')->delete($product->image);
+            if ($product->image) {
+                \Storage::disk('public')->delete($product->image);
+            }
+
+            $product->delete();
+
+            if ($this->product?->id === $id) {
+                $this->createNew();
+            }
+
+            session()->flash('success', 'Product deleted successfully.');
+        } catch (\Exception $e) {
+            session()->flash('error', 'Error deleting product: ' . $e->getMessage());
         }
-
-        $product->delete();
-
-        if ($this->product?->id === $id) {
-            $this->createNew();
-        }
-
-        session()->flash('success', 'Product deleted successfully.');
     }
 
     public function render()
