@@ -28,6 +28,7 @@ class Form extends Component
     public string $company_profile = '';
     public string $live_chat_widget = '';
     public string $address = '';
+    public string $header_footer_color = '#2F5A31';
 
     public TemporaryUploadedFile|null $light_logo = null;
     public TemporaryUploadedFile|null $dark_logo = null;
@@ -60,6 +61,7 @@ class Form extends Component
                 'settings_address',
                 'settings_light_logo',
                 'settings_dark_logo',
+                'settings_header_footer_color',
             ])
             ->pluck('value', 'key');
 
@@ -78,8 +80,14 @@ class Form extends Component
         $this->company_profile = (string) ($settings['settings_company_profile'] ?? '');
         $this->live_chat_widget = (string) ($settings['settings_live_chat_widget'] ?? '');
         $this->address = (string) ($settings['settings_address'] ?? '');
+        $this->header_footer_color = (string) ($settings['settings_header_footer_color'] ?? '#1A3636');
         $this->existingLightLogo = (string) ($settings['settings_light_logo'] ?? '');
         $this->existingDarkLogo = (string) ($settings['settings_dark_logo'] ?? '');
+    }
+
+    public function restoreDefaultColor(): void
+    {
+        $this->header_footer_color = '#1A3636';
     }
 
     protected function rules(): array
@@ -100,6 +108,7 @@ class Form extends Component
             'company_profile' => ['nullable', 'string', 'max:10000'],
             'live_chat_widget' => ['nullable', 'string', 'max:10000'],
             'address' => ['nullable', 'string', 'max:5000'],
+            'header_footer_color' => ['nullable', 'string', 'max:50'],
             'light_logo' => ['nullable', 'image', 'max:4096'],
             'dark_logo' => ['nullable', 'image', 'max:4096'],
         ];
@@ -146,6 +155,7 @@ class Form extends Component
             'settings_company_profile' => $validated['company_profile'] ?? '',
             'settings_live_chat_widget' => $validated['live_chat_widget'] ?? '',
             'settings_address' => $validated['address'] ?? '',
+            'settings_header_footer_color' => $validated['header_footer_color'] ?? '#2F5A31',
             'settings_light_logo' => $this->existingLightLogo ?? '',
             'settings_dark_logo' => $this->existingDarkLogo ?? '',
         ];
@@ -163,6 +173,6 @@ class Form extends Component
     public function render()
     {
         return view('livewire.admin.settings.form.form')
-            ->layout('layouts.app');
+            ->layout('layouts.admin');
     }
 }

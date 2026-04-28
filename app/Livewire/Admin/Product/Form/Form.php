@@ -90,11 +90,14 @@ class Form extends Component
 
     protected function rules(): array
     {
-        $productId = $this->product?->id;
-
         return [
             'name' => ['required', 'string', 'max:255'],
-            'slug' => ['required', 'string', 'max:255', 'unique:products,slug,' . $productId],
+            'slug' => [
+                'required',
+                'string',
+                'max:255',
+                \Illuminate\Validation\Rule::unique('products', 'slug')->ignore($this->product?->id),
+            ],
             'stock' => ['required', 'integer', 'min:0'],
             'price' => ['required', 'numeric', 'min:0'],
             'description' => ['nullable', 'string'],

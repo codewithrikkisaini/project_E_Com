@@ -9,6 +9,10 @@ use Livewire\Component;
 class Dashboard extends Component
 {
     public string $aboutContent = '';
+    public string $aboutStat1Value = '';
+    public string $aboutStat1Label = '';
+    public string $aboutStat2Value = '';
+    public string $aboutStat2Label = '';
 
     public string $pageTitle = 'Dashboard';
 
@@ -23,6 +27,39 @@ class Dashboard extends Component
 
         if ($this->isAboutPage) {
             $this->aboutContent = $this->getAboutContent();
+            
+            if (Schema::hasTable('site_settings')) {
+                $settings = SiteSetting::whereIn('key', [
+                    'about_stat_1_value', 'about_stat_1_label',
+                    'about_stat_2_value', 'about_stat_2_label'
+                ])->pluck('value', 'key');
+
+                $this->aboutStat1Value = $settings['about_stat_1_value'] ?? '100%';
+                $this->aboutStat1Label = $settings['about_stat_1_label'] ?? 'Organic';
+                $this->aboutStat2Value = $settings['about_stat_2_value'] ?? '50k+';
+                $this->aboutStat2Label = $settings['about_stat_2_label'] ?? 'Happy Customers';
+            }
+        }
+    }
+
+    public function getStats(): array
+    {
+        if ($this->pageTitle !== 'Dashboard') {
+            return [];
+        }
+
+        try {
+            return [
+                'products' => \App\Models\Product::count(),
+                'users' => \App\Models\User::where('is_customer', true)->count(),
+                'orders' => \App\Models\Order::count() ?? 0,
+            ];
+        } catch (\Exception $e) {
+            return [
+                'products' => 0,
+                'users' => 0,
+                'orders' => 0,
+            ];
         }
     }
 
@@ -34,16 +71,27 @@ class Dashboard extends Component
 
         $this->validate([
             'aboutContent' => ['nullable', 'string'],
+            'aboutStat1Value' => ['nullable', 'string'],
+            'aboutStat1Label' => ['nullable', 'string'],
+            'aboutStat2Value' => ['nullable', 'string'],
+            'aboutStat2Label' => ['nullable', 'string'],
         ]);
 
         if (Schema::hasTable('site_settings')) {
-            SiteSetting::query()->updateOrCreate(
-                ['key' => 'about_content'],
-                ['value' => $this->aboutContent]
-            );
+            $data = [
+                'about_content' => $this->aboutContent,
+                'about_stat_1_value' => $this->aboutStat1Value,
+                'about_stat_1_label' => $this->aboutStat1Label,
+                'about_stat_2_value' => $this->aboutStat2Value,
+                'about_stat_2_label' => $this->aboutStat2Label,
+            ];
+
+            foreach ($data as $key => $value) {
+                SiteSetting::query()->updateOrCreate(['key' => $key], ['value' => $value]);
+            }
         }
 
-        $this->statusMessage = 'About content updated successfully.';
+        $this->statusMessage = 'About page content and stats updated successfully.';
         session()->flash('status', $this->statusMessage);
     }
 

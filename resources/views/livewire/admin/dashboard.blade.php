@@ -91,7 +91,7 @@
 
                     <div class="flex items-center gap-3">
                         <span>📝</span>
-                        <span>Blogs</span>
+                        <span>Blog</span>
                     </div>
 
                     <span :class="open && 'rotate-180'">⌄</span>
@@ -147,7 +147,11 @@
                 <h1 class="text-3xl font-semibold text-slate-900 lg:text-[42px] lg:leading-none">{{ $pageTitle }}</h1>
 
                 <div class="flex items-center gap-3">
-                    <div class="relative">
+                    <a href="{{ url('/') }}" target="_blank"
+                        class="rounded-xl bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-200 transition">
+                        🌍 View Frontend
+                    </a>
+                    <div class="relative hidden sm:block">
                         <span
                             class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-xl text-slate-400">⌕</span>
                         <input type="text" placeholder="Search..."
@@ -158,8 +162,6 @@
                     <div
                         class="flex h-10 w-10 items-center justify-center rounded-full bg-sky-600 text-sm font-semibold text-white">
                         AU</div>
-                    <button type="button"
-                        class="rounded-full p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-700">⌄</button>
                 </div>
             </div>
         </header>
@@ -178,52 +180,133 @@
                         </div>
                     @endif
 
-                    <div class="space-y-3">
-                        <label class="text-sm font-semibold text-slate-700">About Content</label>
-
-                        <div class="rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
-                            <div class="mb-3 flex flex-wrap items-center gap-2 border-b border-slate-100 pb-3">
-                                <button type="button"
-                                    class="about-tool rounded-md border border-slate-200 px-3 py-1 text-sm font-bold text-slate-700 hover:bg-slate-100"
-                                    data-command="bold">B</button>
-                                <button type="button"
-                                    class="about-tool rounded-md border border-slate-200 px-3 py-1 text-sm italic text-slate-700 hover:bg-slate-100"
-                                    data-command="italic">I</button>
-                                <button type="button"
-                                    class="about-tool rounded-md border border-slate-200 px-3 py-1 text-sm underline text-slate-700 hover:bg-slate-100"
-                                    data-command="underline">U</button>
-                                <button type="button"
-                                    class="about-tool rounded-md border border-slate-200 px-3 py-1 text-sm text-slate-700 hover:bg-slate-100"
-                                    data-command="insertUnorderedList">• List</button>
-                                <button type="button"
-                                    class="about-tool rounded-md border border-slate-200 px-3 py-1 text-sm text-slate-700 hover:bg-slate-100"
-                                    data-command="insertOrderedList">1. List</button>
-                                <button type="button"
-                                    class="about-tool rounded-md border border-slate-200 px-3 py-1 text-sm text-slate-700 hover:bg-slate-100"
-                                    data-block="h2">H2</button>
-                                <button type="button"
-                                    class="about-tool rounded-md border border-slate-200 px-3 py-1 text-sm text-slate-700 hover:bg-slate-100"
-                                    data-block="h3">H3</button>
-                                <button type="button"
-                                    class="about-tool rounded-md border border-slate-200 px-3 py-1 text-sm text-slate-700 hover:bg-slate-100"
-                                    data-link="1">Link</button>
-                                <button type="button"
-                                    class="about-clear rounded-md border border-rose-200 px-3 py-1 text-sm text-rose-700 hover:bg-rose-50">Clear</button>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+                        <div class="space-y-4">
+                            <h4 class="text-xs font-black uppercase tracking-widest text-slate-400">Statistic 1</h4>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Value</label>
+                                    <input type="text" wire:model="aboutStat1Value" class="w-full rounded-xl border-slate-200 bg-slate-50 py-2.5 px-4 text-sm focus:ring-green-500 focus:border-green-500 transition">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Label</label>
+                                    <input type="text" wire:model="aboutStat1Label" class="w-full rounded-xl border-slate-200 bg-slate-50 py-2.5 px-4 text-sm focus:ring-green-500 focus:border-green-500 transition">
+                                </div>
                             </div>
-
-                            <div id="aboutEditor" contenteditable="true"
-                                class="min-h-[420px] w-full rounded-lg border border-slate-200 bg-white p-4 text-slate-900 outline-none focus:border-sky-300 focus:ring-2 focus:ring-sky-100">
+                        </div>
+                        <div class="space-y-4">
+                            <h4 class="text-xs font-black uppercase tracking-widest text-slate-400">Statistic 2</h4>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Value</label>
+                                    <input type="text" wire:model="aboutStat2Value" class="w-full rounded-xl border-slate-200 bg-slate-50 py-2.5 px-4 text-sm focus:ring-green-500 focus:border-green-500 transition">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Label</label>
+                                    <input type="text" wire:model="aboutStat2Label" class="w-full rounded-xl border-slate-200 bg-slate-50 py-2.5 px-4 text-sm focus:ring-green-500 focus:border-green-500 transition">
+                                </div>
                             </div>
-
-                            <textarea id="aboutContentInput" wire:model="aboutContent" class="hidden"></textarea>
                         </div>
                     </div>
 
-                    <div>
+                    <div class="space-y-4">
+                        <label class="text-sm font-extrabold uppercase tracking-widest text-slate-500">Edit About Page Content</label>
+
+                        <!-- Quill Editor Container -->
+                        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden" wire:ignore>
+                            <div id="quill-toolbar" class="border-b border-slate-100 bg-slate-50/50 p-2">
+                                <span class="ql-formats">
+                                    <select class="ql-header">
+                                        <option value="1">Heading 1</option>
+                                        <option value="2">Heading 2</option>
+                                        <option value="3">Heading 3</option>
+                                        <option selected>Normal</option>
+                                    </select>
+                                </span>
+                                <span class="ql-formats">
+                                    <button class="ql-bold"></button>
+                                    <button class="ql-italic"></button>
+                                    <button class="ql-underline"></button>
+                                    <button class="ql-strike"></button>
+                                </span>
+                                <span class="ql-formats">
+                                    <button class="ql-list" value="ordered"></button>
+                                    <button class="ql-list" value="bullet"></button>
+                                </span>
+                                <span class="ql-formats">
+                                    <button class="ql-link"></button>
+                                    <button class="ql-image"></button>
+                                    <button class="ql-clean"></button>
+                                </span>
+                            </div>
+                            <div id="about-quill-editor" class="min-h-[400px] text-slate-800 text-lg p-6">
+                            </div>
+                        </div>
+
+                        <input type="hidden" id="aboutContentInput" wire:model="aboutContent">
+                    </div>
+
+                    <div class="pt-4">
                         <button type="button" wire:click="saveAboutContent"
-                            class="rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700">
-                            Save About Content
+                            class="inline-flex items-center gap-2 rounded-xl bg-[#1e4620] px-6 py-3 text-sm font-black uppercase tracking-widest text-white transition hover:bg-green-900 shadow-lg shadow-green-900/20">
+                            <i class="fas fa-save"></i> Save About Page Content
                         </button>
+                    </div>
+                </div>
+
+                <!-- Quill CSS -->
+                <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+                <!-- Quill JS -->
+                <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+                <script>
+                    document.addEventListener('livewire:init', () => {
+                        const quill = new Quill('#about-quill-editor', {
+                            modules: {
+                                toolbar: '#quill-toolbar'
+                            },
+                            theme: 'snow',
+                            placeholder: 'Write your story here...'
+                        });
+
+                        // Set initial content
+                        quill.root.innerHTML = @js($aboutContent);
+
+                        // Sync content to Livewire
+                        quill.on('text-change', function() {
+                            let content = quill.root.innerHTML;
+                            if (content === '<p><br></p>') content = '';
+                            @this.set('aboutContent', content);
+                        });
+                    });
+                </script>
+                </div>
+            @elseif($pageTitle === 'Dashboard')
+                @php $stats = $this->getStats(); @endphp
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div
+                        class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-slate-500">Total Products</p>
+                            <h3 class="text-3xl font-bold text-slate-800 mt-1">{{ $stats['products'] ?? 0 }}</h3>
+                        </div>
+                        <div class="h-12 w-12 rounded-full bg-blue-50 flex items-center justify-center text-2xl">📦</div>
+                    </div>
+                    <div
+                        class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-slate-500">Total Orders</p>
+                            <h3 class="text-3xl font-bold text-slate-800 mt-1">{{ $stats['orders'] ?? 0 }}</h3>
+                        </div>
+                        <div class="h-12 w-12 rounded-full bg-emerald-50 flex items-center justify-center text-2xl">📑</div>
+                    </div>
+                    <div
+                        class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-slate-500">Customers</p>
+                            <h3 class="text-3xl font-bold text-slate-800 mt-1">{{ $stats['users'] ?? 0 }}</h3>
+                        </div>
+                        <div class="h-12 w-12 rounded-full bg-purple-50 flex items-center justify-center text-2xl">👤</div>
                     </div>
                 </div>
             @else

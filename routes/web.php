@@ -14,38 +14,49 @@ Route::get('/', function () {
 })->name('home');
 
 // Essential routes for navigation components
-Route::get('/products', function () {
-    return redirect()->route('admin.products'); })->name('products');
+Route::get('/products', \App\Livewire\Frontend\Product\Index::class)->name('products');
+Route::get('/product/{slug}', \App\Livewire\Frontend\Product\Detail::class)->name('product.detail');
+Route::get('/checkout', \App\Livewire\Frontend\Checkout\Index::class)->name('checkout');
+
 Route::get('/about', function () {
-    return redirect()->route('admin.about'); })->name('about');
-Route::get('/blog', function () {
-    return redirect()->route('admin.blogs'); })->name('blog');
-Route::get('/contact', function () {
-    return view('welcome'); })->name('contact');
-Route::get('/login', function () {
-    return view('welcome'); })->name('login');
+    return view('frontend.about');
+})->name('about');
+
+Route::get('/blog', \App\Livewire\Frontend\Blog\Index::class)->name('blog');
+
+Route::get('/contact', \App\Livewire\Frontend\Contact\Index::class)->name('contact');
+
+Route::get('/login', \App\Livewire\Frontend\Auth\Login::class)->name('login');
+Route::post('/logout', function (\Illuminate\Http\Request $request) {
+    \Illuminate\Support\Facades\Auth::logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+    return redirect('/');
+})->name('logout');
+
 Route::get('/register', function () {
-    return view('welcome'); })->name('register');
+    return view('welcome'); // Currently redirects to welcome, adjust if register view exists
+})->name('register');
 
 // Admin Routes
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
 
     Route::get('/products', ProductForm::class)->name('products');
     Route::redirect('/product/create', '/admin/products')->name('product.create');
     Route::get('/product/{product}/edit', ProductForm::class)->name('product.edit');
 
-    Route::get('/banner', Dashboard::class)->name('banner');
+    Route::get('/banner', \App\Livewire\Admin\Banner\Form\Form::class)->name('banner');
     Route::get('/services', Dashboard::class)->name('services');
     Route::get('/about', Dashboard::class)->name('about');
     Route::get('/testimonials', TestimonialForm::class)->name('testimonials');
     Route::get('/orders', OrderIndex::class)->name('orders');
     Route::get('/users', UserIndex::class)->name('users');
     Route::get('/payment-settings', PaymentSettingsForm::class)->name('payment-settings');
-    Route::get('/settings', Dashboard::class)->name('settings');
-    Route::get('/blog-categories', Dashboard::class)->name('blog-categories');
-    Route::get('/blogs', Dashboard::class)->name('blogs');
-    Route::get('/enquiries', Dashboard::class)->name('enquiries');
+    Route::get('/settings', \App\Livewire\Admin\Settings\Form\Form::class)->name('settings');
+    Route::get('/blog-categories', \App\Livewire\Admin\BlogCategory\Form\Form::class)->name('blog-categories');
+    Route::get('/blogs', \App\Livewire\Admin\Blog\Form\Form::class)->name('blogs');
+    Route::get('/enquiries', \App\Livewire\Admin\Enquiry\Index::class)->name('enquiries');
 });
 // Database Management Routes (Backend Work)
 Route::get('/migrate', function () {

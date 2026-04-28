@@ -234,6 +234,7 @@
                         <table class="min-w-full divide-y divide-slate-200 text-sm">
                             <thead class="bg-slate-50">
                                 <tr>
+                                    <th class="px-4 py-3 text-left font-semibold text-slate-600">Image</th>
                                     <th class="px-4 py-3 text-left font-semibold text-slate-600">Name</th>
                                     <th class="px-4 py-3 text-left font-semibold text-slate-600">Slug</th>
                                     <th class="px-4 py-3 text-left font-semibold text-slate-600">Price</th>
@@ -245,6 +246,15 @@
                             <tbody class="divide-y divide-slate-100">
                                 @forelse($products as $item)
                                     <tr>
+                                        <td class="px-4 py-3">
+                                            @if($item->image)
+                                                <img src="{{ Storage::url($item->image) }}" class="h-10 w-10 rounded-lg object-cover border border-slate-200">
+                                            @else
+                                                <div class="h-10 w-10 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400">
+                                                    <i class="fas fa-image text-xs"></i>
+                                                </div>
+                                            @endif
+                                        </td>
                                         <td class="px-4 py-3 font-medium text-slate-800">{{ $item->name }}</td>
                                         <td class="px-4 py-3 text-slate-600">{{ $item->slug }}</td>
                                         <td class="px-4 py-3 text-slate-600">{{ number_format((float) $item->price, 2) }}</td>
@@ -252,14 +262,18 @@
                                         <td class="px-4 py-3 text-slate-600">{{ $item->created_at?->format('d M Y') }}</td>
                                         <td class="px-4 py-3 text-right">
                                             <div class="flex items-center justify-end gap-2">
+                                                <a href="{{ route('product.detail', $item->slug) }}" target="_blank"
+                                                    class="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 flex items-center gap-1.5">
+                                                    <i class="fas fa-eye"></i> View
+                                                </a>
                                                 <button type="button" wire:click="edit({{ $item->id }})"
-                                                    class="rounded-lg border border-blue-200 px-3 py-1.5 text-xs font-semibold text-blue-700 hover:bg-blue-50">
-                                                    Edit
+                                                    class="rounded-lg border border-blue-200 px-3 py-1.5 text-xs font-semibold text-blue-700 hover:bg-blue-50 flex items-center gap-1.5">
+                                                    <i class="fas fa-edit"></i> Edit
                                                 </button>
                                                 <button type="button" wire:click="delete({{ $item->id }})"
                                                     wire:confirm="Are you sure you want to delete this product?"
-                                                    class="rounded-lg border border-rose-200 px-3 py-1.5 text-xs font-semibold text-rose-700 hover:bg-rose-50">
-                                                    Delete
+                                                    class="rounded-lg border border-rose-200 px-3 py-1.5 text-xs font-semibold text-rose-700 hover:bg-rose-50 flex items-center gap-1.5">
+                                                    <i class="fas fa-trash"></i> Delete
                                                 </button>
                                             </div>
                                         </td>

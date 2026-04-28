@@ -155,6 +155,36 @@
                             <textarea wire:model.live="footer_text" rows="2" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm outline-none focus:border-blue-400 focus:bg-white"></textarea>
                         </div>
 
+                        <div class="rounded-xl border border-slate-200 bg-slate-50 p-5">
+                            <label class="mb-1 block text-sm font-medium text-slate-700">Header / Footer Background Color</label>
+                            <p class="mb-4 text-xs text-slate-500">The default color will remain #1A3636. Changing it here will update both the website header and footer.</p>
+                            
+                            <div class="flex flex-wrap items-end gap-4">
+                                <div>
+                                    <label class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-slate-500">Color Picker</label>
+                                    <input type="color" wire:model.live="header_footer_color" class="h-10 w-24 cursor-pointer rounded-lg border border-slate-200 bg-white p-1" />
+                                </div>
+                                <div class="flex-1 min-w-[200px]">
+                                    <label class="mb-1 block text-[10px] font-bold uppercase tracking-wider text-slate-500">Color Code</label>
+                                    <input type="text" wire:model.live="header_footer_color" class="w-full rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm outline-none focus:border-blue-400" />
+                                </div>
+                                <div>
+                                    <button type="button" wire:click="restoreDefaultColor" class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 transition">
+                                        Restore Default
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="mt-5 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
+                                <div class="p-4" style="background-color: {{ $header_footer_color }}">
+                                    <span class="text-sm font-semibold text-white">Preview Bar</span>
+                                </div>
+                                <div class="bg-slate-50 p-2 text-xs text-slate-500 px-4 border-t border-slate-200">
+                                    Current selected color: <strong class="text-slate-700">{{ $header_footer_color }}</strong>
+                                </div>
+                            </div>
+                        </div>
+
                         <div>
                             <label class="mb-1.5 block text-sm font-medium text-slate-700">Company Profile</label>
                             <textarea wire:model.live="company_profile" rows="3" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm outline-none focus:border-blue-400 focus:bg-white"></textarea>

@@ -30,6 +30,18 @@ class Order extends Model
         'ordered_at' => 'datetime',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($order) {
+            $order->order_number = 'ORD-' . strtoupper(uniqid());
+            if (empty($order->ordered_at)) {
+                $order->ordered_at = now();
+            }
+        });
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
